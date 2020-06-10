@@ -1,5 +1,6 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+// /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { getServices } from '../store';
 import ServiceItem from '../components/ServiceItem';
@@ -7,11 +8,12 @@ import Hero from '../components/Hero';
 
 function Home() {
   const [services, setServices] = useState([]);
+  const service = useSelector(state => state.service);
 
   useEffect(() => {
     const services = getServices();
     setServices(services);
-  }, []);
+  }, [service]);
 
   const renderServices = services =>
     services.map(service => <ServiceItem key={service.id} service={service} />);
