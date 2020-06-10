@@ -1,4 +1,5 @@
-import { createStore, combineReducers } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
 import servicesReducer from '../reducers';
 
 const addLoggerToDispatch = store => {
@@ -15,15 +16,21 @@ const addLoggerToDispatch = store => {
   };
 };
 
+const middlewares = [thunk];
+
 const rootReducer = combineReducers({
   service: servicesReducer,
 });
 
-const browserSupport =
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(rootReducer, browserSupport);
+const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(...middlewares)),
+);
 
-store.dispatch = addLoggerToDispatch(store);
+if (process.env.NODE_ENV !== 'production') {
+  store.dispatch = addLoggerToDispatch(store);
+}
 
 export default store;

@@ -1,5 +1,5 @@
 // /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ServiceItem from '../components/ServiceItem';
@@ -7,26 +7,22 @@ import Hero from '../components/Hero';
 import { fetchServices } from '../actions';
 
 function Home() {
-  const [services, setServices] = useState([]);
-  const service = useSelector(state => state.service.items);
+  const services = useSelector(state => state.service.items);
   const dispatch = useDispatch();
 
   // const loadServices = useCallback(async () => {
   //   try {
   //     await dispatch(fetchServices());
-  //     setServices(service);
   //   } catch (err) {
   //     console.log(err);
   //   }
-  // }, [dispatch, service]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchServices());
-
-    setServices(service);
-
     // loadServices();
-  }, [dispatch, service]);
+  }, [dispatch]);
 
   const renderServices = services =>
     services.map(service => <ServiceItem key={service.id} service={service} />);
