@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import NavbarClone from '../components/NavbarClone';
+
 import { getServices } from '../store';
 import ServiceItem from '../components/ServiceItem';
 import Hero from '../components/Hero';
@@ -19,8 +18,6 @@ function Home() {
 
   return (
     <div>
-      <Navbar />
-      <NavbarClone />
       <Hero />
 
       <section className="section section-feature-grey is-medium">
