@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchServiceById, clearService, requestService } from '../actions';
+import { fetchServiceById } from '../actions';
 import Spinner from '../components/Spinner';
 
 const ServiceDetail = () => {
@@ -10,14 +10,13 @@ const ServiceDetail = () => {
   const service = useSelector(state => state.selectedService.item);
   const isFetching = useSelector(state => state.selectedService.isFetching);
 
+  console.log('service item', service);
   useEffect(() => {
-    // dispatch(requestService());
     dispatch(fetchServiceById(serviceId));
-
-    // return () => dispatch(clearService());
   }, [dispatch, serviceId]);
 
-  if (isFetching && !service.id) {
+  if (isFetching || serviceId !== service.id) {
+    // if (isFetching && !service.id) {
     return <Spinner />;
   }
 

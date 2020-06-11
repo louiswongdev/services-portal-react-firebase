@@ -26,16 +26,16 @@ export const fetchServices = () => {
 
 export const fetchServiceById = id => {
   return async dispatch => {
-    dispatch({ type: CLEAR_SERVICE });
+    // dispatch({ type: CLEAR_SERVICE });
     dispatch({ type: REQUEST_SERVICE });
     try {
       // const snapshot = await db.collection(`services/${id}`).get();
       const snapshot = await db.collection('services').doc(id).get();
-      const service = snapshot.data();
+      const service = { id: snapshot.id, ...snapshot.data() };
 
       dispatch({
         type: FETCH_SERVICE_SUCCESS,
-        service: { id: service.id, ...service },
+        service,
       });
     } catch (err) {
       console.log(err);
