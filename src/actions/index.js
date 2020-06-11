@@ -1,5 +1,9 @@
-import { FETCH_SERVICES_SUCCESS, CLEAR_SERVICE } from '../types';
-import { FETCH_SERVICE_SUCCESS } from '../types';
+import {
+  FETCH_SERVICES_SUCCESS,
+  FETCH_SERVICE_SUCCESS,
+  CLEAR_SERVICE,
+  REQUEST_SERVICE,
+} from '../types';
 
 import db from '../db';
 
@@ -22,6 +26,8 @@ export const fetchServices = () => {
 
 export const fetchServiceById = id => {
   return async dispatch => {
+    dispatch({ type: CLEAR_SERVICE });
+    dispatch({ type: REQUEST_SERVICE });
     try {
       // const snapshot = await db.collection(`services/${id}`).get();
       const snapshot = await db.collection('services').doc(id).get();
@@ -37,6 +43,10 @@ export const fetchServiceById = id => {
   };
 };
 
-export const clearService = () => {
-  return { type: CLEAR_SERVICE };
-};
+// export const clearService = () => {
+//   return { type: CLEAR_SERVICE };
+// };
+
+// export const requestService = () => ({
+//   type: REQUEST_SERVICE,
+// });

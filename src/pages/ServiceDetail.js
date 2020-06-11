@@ -1,18 +1,26 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchServiceById, clearService } from '../actions';
+import { fetchServiceById, clearService, requestService } from '../actions';
+import Spinner from '../components/Spinner';
 
 const ServiceDetail = () => {
   const { serviceId } = useParams();
   const dispatch = useDispatch();
   const service = useSelector(state => state.selectedService.item);
+  const isFetching = useSelector(state => state.selectedService.isFetching);
 
   useEffect(() => {
+    // dispatch(requestService());
     dispatch(fetchServiceById(serviceId));
 
-    return () => dispatch(clearService());
+    // return () => dispatch(clearService());
   }, [dispatch, serviceId]);
+
+  if (isFetching && !service.id) {
+    return <Spinner />;
+  }
+
   return (
     <section className="hero is-fullheight is-default is-bold">
       <div className="hero-body">
