@@ -15,7 +15,6 @@ export const fetchServices = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log(services);
 
       dispatch({ type: FETCH_SERVICES_SUCCESS, services });
     } catch (err) {
@@ -25,7 +24,16 @@ export const fetchServices = () => {
 };
 
 export const fetchServiceById = id => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    // Caching: Get current service item and check if it's the same as item id being
+    // passed in. This will prevent unnecessary fetch requests if we are
+    // trying to click to same service page
+    const lastService = getState().selectedService.item;
+
+    if (lastService.id && lastService.id === id) {
+      return Promise.resolve();
+    }
+
     // dispatch({ type: CLEAR_SERVICE });
     dispatch({ type: REQUEST_SERVICE });
     try {

@@ -10,7 +10,6 @@ const ServiceDetail = () => {
   const service = useSelector(state => state.selectedService.item);
   const isFetching = useSelector(state => state.selectedService.isFetching);
 
-  console.log('service item', service);
   useEffect(() => {
     dispatch(fetchServiceById(serviceId));
   }, [dispatch, serviceId]);
