@@ -1,6 +1,6 @@
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import servicesReducer from '../reducers';
+import serviceApp from '../reducers';
 
 const addLoggerToDispatch = store => {
   const dispatch = store.dispatch;
@@ -18,14 +18,14 @@ const addLoggerToDispatch = store => {
 
 const middlewares = [thunk];
 
-const rootReducer = combineReducers({
-  service: servicesReducer,
-});
+// const rootReducer = combineReducers({
+//   service: servicesReducer,
+// });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
-  rootReducer,
+  serviceApp,
   composeEnhancers(applyMiddleware(...middlewares)),
 );
 

@@ -1,4 +1,6 @@
-import { FETCH_SERVICES_SUCCESS } from '../types';
+import { FETCH_SERVICES_SUCCESS, CLEAR_SERVICE } from '../types';
+import { FETCH_SERVICE_SUCCESS } from '../types';
+
 import db from '../db';
 
 export const fetchServices = () => {
@@ -16,4 +18,25 @@ export const fetchServices = () => {
       console.log(err);
     }
   };
+};
+
+export const fetchServiceById = id => {
+  return async dispatch => {
+    try {
+      // const snapshot = await db.collection(`services/${id}`).get();
+      const snapshot = await db.collection('services').doc(id).get();
+      const service = snapshot.data();
+
+      dispatch({
+        type: FETCH_SERVICE_SUCCESS,
+        service: { id: service.id, ...service },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const clearService = () => {
+  return { type: CLEAR_SERVICE };
 };

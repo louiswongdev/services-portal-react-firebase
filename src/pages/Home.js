@@ -7,7 +7,7 @@ import Hero from '../components/Hero';
 import { fetchServices } from '../actions';
 
 function Home() {
-  const services = useSelector(state => state.service.items);
+  const services = useSelector(state => state.services.items);
   const dispatch = useDispatch();
 
   // const loadServices = useCallback(async () => {
