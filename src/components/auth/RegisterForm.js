@@ -1,16 +1,20 @@
 /* eslint-disable no-useless-escape */
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import {
+  isValidImage,
+  isValidURL,
+  samePassword,
+} from '../../helpers/validators';
 
 const RegisterForm = () => {
-  const { register, errors, handleSubmit } = useForm();
+  const { register, errors, handleSubmit, getValues } = useForm();
 
   const getFormData = data => {
     console.log(data);
   };
 
   const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  const avatarPattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm;
 
   return (
     <form onSubmit={handleSubmit(getFormData)}>
@@ -64,7 +68,10 @@ const RegisterForm = () => {
       <div className="field">
         <div className="control">
           <input
-            ref={register({ required: true, pattern: avatarPattern })}
+            ref={register({
+              required: true,
+              validate: { isValidImage, isValidURL },
+            })}
             name="avatar"
             className="input is-large"
             type="text"
@@ -75,8 +82,13 @@ const RegisterForm = () => {
               {errors.avatar.type === 'required' && (
                 <span className="help is-danger">Avatar is required</span>
               )}
-              {errors.avatar.type === 'pattern' && (
-                <span className="help is-danger">Avatart is not valid</span>
+              {errors.avatar.type === 'isValidImage' && (
+                <span className="help is-danger">
+                  Avatar file extension is not valid
+                </span>
+              )}
+              {errors.avatar.type === 'isValidURL' && (
+                <span className="help is-danger">Avatar URL is not valid</span>
               )}
             </div>
           )}
@@ -85,7 +97,10 @@ const RegisterForm = () => {
       <div className="field">
         <div className="control">
           <input
-            ref={register({ required: true, minLength: 6 })}
+            ref={register({
+              required: true,
+              minLength: 6,
+            })}
             name="password"
             className="input is-large"
             type="password"
@@ -109,7 +124,11 @@ const RegisterForm = () => {
       <div className="field">
         <div className="control">
           <input
-            ref={register({ required: true, minLength: 6 })}
+            ref={register({
+              required: true,
+              minLength: 6,
+              validate: { samePassword: samePassword(getValues, 'password') },
+            })}
             name="passwordConfirmation"
             className="input is-large"
             type="password"
@@ -127,6 +146,9 @@ const RegisterForm = () => {
                 <span className="help is-danger">
                   Password needs to be at least 6 characters
                 </span>
+              )}
+              {errors.passwordConfirmation.type === 'samePassword' && (
+                <span className="help is-danger">Passwords do not match</span>
               )}
             </div>
           )}
