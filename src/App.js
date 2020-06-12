@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { ToastProvider } from 'react-toast-notifications';
 import store from './store';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -19,20 +20,26 @@ import ServiceDetail from './pages/ServiceDetail';
 function App() {
   return (
     <Provider store={store}>
-      <Router>
-        <Navbar />
-        <Navbar id="navbar-clone" />
-        <Sidebar />
-        <Switch>
-          <Route path="/register" exact component={Register} />
-          <Route path="/login" exact component={Login} />
-          <Route path="/services/:serviceId" exact component={ServiceDetail} />
-          <Route path="/services" exact component={Services} />
-          <Route path="/faq" exact component={Faq} />
-          <Route path="/profile" exact component={Profile} />
-          <Route path="/" component={HomePage} />
-        </Switch>
-      </Router>
+      <ToastProvider>
+        <Router>
+          <Navbar />
+          <Navbar id="navbar-clone" />
+          <Sidebar />
+          <Switch>
+            <Route path="/register" exact component={Register} />
+            <Route path="/login" exact component={Login} />
+            <Route
+              path="/services/:serviceId"
+              exact
+              component={ServiceDetail}
+            />
+            <Route path="/services" exact component={Services} />
+            <Route path="/faq" exact component={Faq} />
+            <Route path="/profile" exact component={Profile} />
+            <Route path="/" component={HomePage} />
+          </Switch>
+        </Router>
+      </ToastProvider>
     </Provider>
   );
 }
