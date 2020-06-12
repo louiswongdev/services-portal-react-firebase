@@ -53,6 +53,8 @@ export const getUserProfile = async uid => {
   try {
     const snapshot = await db.collection('profiles').doc(uid).get();
 
+    // userProfile = snapshot.data() works the same in this case
+    // since our profile document already has uid field
     const userProfile = { uid, ...snapshot.data() };
 
     return userProfile;

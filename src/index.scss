@@ -671,6 +671,8 @@ Navbar
 ========================================================================== */
 
 //Navbar
+
+
 .navbar.is-fresh {
     position: relative;
     min-height: 3.8rem;
@@ -704,6 +706,11 @@ Navbar
     .navbar-end {
         align-items: center;
     }
+
+    .user-welcome {
+        color: #4fc1ea !important;
+    }
+
     //Navbar items
     .navbar-item {
         color: $muted-grey;

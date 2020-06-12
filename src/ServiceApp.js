@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { onAuthStateChanged, storeAuthUser } from './actions';
 
 import Sidebar from './components/Sidebar';
-import Navbar from './components/Navbar';
 import Routes from './Routes';
-import { useDispatch } from 'react-redux';
-import { onAuthStateChanged, storeAuthUser } from './actions';
+import Navbar from './components/Navbar';
+import Spinner from './components/Spinner';
 
 const ServiceApp = () => {
   const dispatch = useDispatch();
+  const auth = useSelector(state => state.auth);
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(authUser => {
@@ -16,16 +18,19 @@ const ServiceApp = () => {
 
     return () => unsubscribeAuth();
   }, [dispatch]);
+
   const RenderApplication = () => (
     <>
-      <Navbar />
-      <Navbar id="navbar-clone" />
+      <Navbar auth={auth} />
+      <Navbar auth={auth} id="navbar-clone" />
+
       <Sidebar />
       <Routes />
     </>
   );
 
-  return <RenderApplication />;
+  return auth.isAuthResolved ? <RenderApplication /> : <Spinner />;
+  // return <RenderApplication />;
 };
 
 export default ServiceApp;
