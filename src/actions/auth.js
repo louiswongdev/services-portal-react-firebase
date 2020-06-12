@@ -43,3 +43,16 @@ export const createUserProfile = async userProfile => {
     console.log(error);
   }
 };
+
+/**
+ * ------------------------------------------
+ * Login User
+ * ------------------------------------------
+ */
+export const login = async ({ email, password }) => {
+  try {
+    await firebase.auth().signInWithEmailAndPassword(email, password);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

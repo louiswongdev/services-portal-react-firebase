@@ -1,7 +1,31 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import LoginForm from '../components/auth/LoginForm';
+import { useToasts } from 'react-toast-notifications';
+import { login } from '../actions';
 
 const Login = () => {
+  const [redirect, setRedirect] = useState(false);
+  const { addToast } = useToasts();
+
+  const loginUser = async loginData => {
+    try {
+      await login(loginData);
+      setRedirect(true);
+    } catch (error) {
+      addToast(error.message, {
+        appearance: 'error',
+        autoDismiss: true,
+        autoDismissTimeout: 5000,
+      });
+    }
+  };
+
+  if (redirect) {
+    return <Redirect to="/" />;
+  }
+
   return (
     <div className="auth-page">
       <div className="container has-text-centered">
@@ -12,44 +36,7 @@ const Login = () => {
             <figure className="avatar">
               <img src="https://placehold.it/128x128" alt="logo" />
             </figure>
-            <form>
-              <div className="field">
-                <div className="control">
-                  <input
-                    className="input is-large"
-                    type="email"
-                    placeholder="Your Email"
-                    autoFocus=""
-                    autoComplete="email"
-                  />
-                  <div className="form-error">
-                    <span className="help is-danger">Email is required</span>
-                    <span className="help is-danger">
-                      Email address is not valid
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="field">
-                <div className="control">
-                  <input
-                    className="input is-large"
-                    type="password"
-                    placeholder="Your Password"
-                    autoComplete="current-password"
-                  />
-                  <div className="form-error">
-                    <span className="help is-danger">Password is required</span>
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                className="button is-block is-info is-large is-fullwidth"
-              >
-                Sign In
-              </button>
-            </form>
+            <LoginForm onLogin={loginUser} />
           </div>
           <p className="has-text-grey">
             <a>Sign In With Google</a>&nbsp;

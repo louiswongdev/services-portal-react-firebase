@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
-import { withRouter, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 // import { useHistory } from 'react-router-dom';
 
 import RegisterForm from '../components/auth/RegisterForm';
@@ -18,7 +18,6 @@ const Register = () => {
       setRedirect(true);
       // history.push('/');
     } catch (error) {
-      console.log(error);
       addToast(error.message, {
         appearance: 'error',
         autoDismiss: true,
@@ -54,4 +53,4 @@ const Register = () => {
   );
 };
 
-export default withRouter(Register);
+export default Register;
