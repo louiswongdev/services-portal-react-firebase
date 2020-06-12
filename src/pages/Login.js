@@ -19,8 +19,8 @@ const Login = () => {
                     className="input is-large"
                     type="email"
                     placeholder="Your Email"
-                    autofocus=""
-                    autocomplete="email"
+                    autoFocus=""
+                    autoComplete="email"
                   />
                   <div className="form-error">
                     <span className="help is-danger">Email is required</span>
@@ -36,7 +36,7 @@ const Login = () => {
                     className="input is-large"
                     type="password"
                     placeholder="Your Password"
-                    autocomplete="current-password"
+                    autoComplete="current-password"
                   />
                   <div className="form-error">
                     <span className="help is-danger">Password is required</span>

@@ -7,17 +7,13 @@ import {
   samePassword,
 } from '../../helpers/validators';
 
-const RegisterForm = () => {
+const RegisterForm = ({ onRegister }) => {
   const { register, errors, handleSubmit, getValues } = useForm();
-
-  const getFormData = data => {
-    console.log(data);
-  };
 
   const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   return (
-    <form onSubmit={handleSubmit(getFormData)}>
+    <form onSubmit={handleSubmit(onRegister)}>
       <div className="field">
         <div className="control">
           <input

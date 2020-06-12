@@ -1,8 +1,21 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import RegisterForm from '../components/auth/RegisterForm';
+import { register } from '../actions/';
+import { useDispatch } from 'react-redux';
 
 const Register = () => {
+  // const dispatch = useDispatch();
+
+  const registerUser = async userData => {
+    try {
+      const res = await register(userData);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="auth-page">
       <div className="container has-text-centered">
@@ -13,7 +26,7 @@ const Register = () => {
             <figure className="avatar">
               <img src="https://placehold.it/128x128" alt="logo" />
             </figure>
-            <RegisterForm />
+            <RegisterForm onRegister={registerUser} />
           </div>
           <p className="has-text-grey">
             <a>Sign In With Google</a>&nbsp;
