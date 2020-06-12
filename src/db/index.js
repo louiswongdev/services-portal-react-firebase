@@ -13,6 +13,7 @@ const db = firebase
   })
   .firestore();
 
+// db.settings({ experimentalForceLongPolling: true });
 export default db;
 
 export const { Timestamp } = firebase.firestore;
