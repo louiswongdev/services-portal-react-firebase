@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { onAuthStateChanged, storeAuthUser } from './actions';
+import { onAuthStateChanged, storeAuthUser, logout } from './actions';
 
 import Sidebar from './components/Sidebar';
 import Routes from './Routes';
@@ -10,6 +10,11 @@ import Spinner from './components/Spinner';
 const ServiceApp = () => {
   const dispatch = useDispatch();
   const auth = useSelector(state => state.auth);
+
+  const handleLogout = () => {
+    console.log('hiiii');
+    dispatch(logout());
+  };
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(authUser => {
@@ -21,9 +26,8 @@ const ServiceApp = () => {
 
   const RenderApplication = () => (
     <>
-      <Navbar auth={auth} />
-      <Navbar auth={auth} id="navbar-clone" />
-
+      <Navbar auth={auth} logout={handleLogout} id="navbar-main" />
+      <Navbar auth={auth} logout={handleLogout} id="navbar-clone" />
       <Sidebar />
       <Routes />
     </>

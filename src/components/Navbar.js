@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ auth: { user, isAuth }, id }) => {
+const Navbar = ({ auth: { user, isAuth }, id, logout }) => {
   // const { user } = auth;
   return (
     <nav
@@ -125,7 +125,7 @@ const Navbar = ({ auth: { user, isAuth }, id }) => {
               </>
             )}
             {isAuth && (
-              <Link to="/" className="navbar-item">
+              <Link to="/" className="navbar-item" onClick={logout}>
                 <span className="button signup-button rounded is-danger raised">
                   Logout
                 </span>

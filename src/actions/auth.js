@@ -78,6 +78,18 @@ export const login = async ({ email, password }) => {
 
 /**
  * ------------------------------------------
+ * Logout User
+ * ------------------------------------------
+ */
+export const logout = () => {
+  return async dispatch => {
+    await firebase.auth().signOut();
+    dispatch({ type: SET_AUTH_USER, user: null });
+  };
+};
+
+/**
+ * ------------------------------------------
  * Auth state change
  * ------------------------------------------
  */
