@@ -26,7 +26,7 @@ const ServiceApp = () => {
 
   const RenderApplication = () => (
     <>
-      <Navbar auth={auth} logout={handleLogout} id="navbar-main" />
+      <Navbar loadFresh auth={auth} logout={handleLogout} id="navbar-main" />
       <Navbar auth={auth} logout={handleLogout} id="navbar-clone" />
       <Sidebar />
       <Routes />

@@ -1,9 +1,20 @@
 /* eslint jsx-a11y/anchor-is-valid: 0 */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ auth: { user, isAuth }, id, logout }) => {
-  // const { user } = auth;
+const Navbar = ({ auth: { user, isAuth }, id, logout, loadFresh }) => {
+  useEffect(() => {
+    // prevent navbar clone from loading our script
+    if (!loadFresh) {
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = `${process.env.PUBLIC_URL}/js/fresh.js`;
+    script.async = true;
+    document.body.appendChild(script);
+  }, [loadFresh]);
+
   return (
     <nav
       id={id || ''}
