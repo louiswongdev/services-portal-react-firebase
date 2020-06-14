@@ -8,10 +8,12 @@ import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ServiceDetail from './pages/ServiceDetail';
+import Secret from './pages/Secret';
 
 const Routes = () => {
   return (
     <Switch>
+      <Route path="/secret" component={Secret} />
       <Route path="/register" exact component={Register} />
       <Route path="/login" exact component={Login} />
       <Route path="/services/:serviceId" exact component={ServiceDetail} />

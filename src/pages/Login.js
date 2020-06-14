@@ -5,6 +5,7 @@ import LoginForm from '../components/auth/LoginForm';
 import { useToasts } from 'react-toast-notifications';
 import { login } from '../actions';
 import { useDispatch } from 'react-redux';
+import onlyGuest from '../components/hoc/onlyGuest';
 
 const Login = () => {
   const [redirect, setRedirect] = useState(false);
@@ -52,4 +53,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default onlyGuest(Login);
