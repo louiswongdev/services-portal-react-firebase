@@ -8,22 +8,14 @@ import ServiceApp from './ServiceApp';
 
 import { onAuthStateChanged, storeAuthUser, resetAuthState } from './actions';
 
-// const store = initStore();
-
 function App() {
   useEffect(() => {
-    let mounted = true;
     const unsubscribeAuth = onAuthStateChanged(authUser => {
       // store.dispatch(resetAuthState());
-      if (mounted) {
-        store.dispatch(storeAuthUser(authUser));
-      }
+      store.dispatch(storeAuthUser(authUser));
     });
 
-    return () => {
-      mounted = false;
-      unsubscribeAuth();
-    };
+    return () => unsubscribeAuth();
   }, []);
 
   return (
@@ -40,7 +32,7 @@ function App() {
 // class App extends React.Component {
 //   componentDidMount() {
 //     this.unsubscribeAuth = onAuthStateChanged(authUser => {
-//       // store.dispatch(resetAuthState());
+//       store.dispatch(resetAuthState());
 //       store.dispatch(storeAuthUser(authUser));
 //     });
 //   }

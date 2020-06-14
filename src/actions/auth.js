@@ -100,22 +100,22 @@ export const resetAuthState = () => ({ type: RESET_AUTH_STATE });
  * Logout User
  * ------------------------------------------
  */
-// export const logout = () => {
-//   return async dispatch => {
-//     await firebase.auth().signOut();
-//     // dispatch({ type: RESET_AUTH_STATE });
-//     dispatch({ type: SET_AUTH_USER, user: null });
-//   };
-// };
-
 export const logout = () => {
-  return dispatch => {
-    firebase
-      .auth()
-      .signOut()
-      .then(_ => dispatch({ user: null, type: SET_AUTH_USER }));
+  return async dispatch => {
+    await firebase.auth().signOut();
+    // dispatch({ type: RESET_AUTH_STATE });
+    dispatch({ type: SET_AUTH_USER, user: null });
   };
 };
+
+// export const logout = () => {
+//   return dispatch => {
+//     firebase
+//       .auth()
+//       .signOut()
+//       .then(_ => dispatch({ user: null, type: SET_AUTH_USER }));
+//   };
+// };
 
 /**
  * ------------------------------------------
