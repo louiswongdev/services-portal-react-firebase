@@ -4,14 +4,17 @@ import { Redirect } from 'react-router-dom';
 import LoginForm from '../components/auth/LoginForm';
 import { useToasts } from 'react-toast-notifications';
 import { login } from '../actions';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
   const [redirect, setRedirect] = useState(false);
   const { addToast } = useToasts();
 
+  const dispatch = useDispatch();
   const loginUser = async loginData => {
     try {
-      await login(loginData);
+      // await login(loginData);
+      await dispatch(login(loginData));
       setRedirect(true);
     } catch (error) {
       addToast(error.message, {

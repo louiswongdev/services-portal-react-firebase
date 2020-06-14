@@ -1,8 +1,16 @@
 /* eslint jsx-a11y/anchor-is-valid: 0 */
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../actions';
 
-const Navbar = ({ auth: { user, isAuth }, id, logout, loadFresh }) => {
+const Navbar = ({ auth: { user, isAuth }, id, loadFresh }) => {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   useEffect(() => {
     // prevent navbar clone from loading our script
     if (!loadFresh) {
@@ -136,7 +144,7 @@ const Navbar = ({ auth: { user, isAuth }, id, logout, loadFresh }) => {
               </>
             )}
             {isAuth && (
-              <Link to="/" className="navbar-item" onClick={logout}>
+              <Link to="/" className="navbar-item" onClick={handleLogout}>
                 <span className="button signup-button rounded is-danger raised">
                   Logout
                 </span>

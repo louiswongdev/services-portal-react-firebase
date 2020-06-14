@@ -1,5 +1,5 @@
 // /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ServiceItem from '../components/ServiceItem';
@@ -19,10 +19,13 @@ function Home() {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [dispatch]);
 
-  useEffect(() => {
+  const loadServices = useCallback(() => {
     dispatch(fetchServices());
-    // loadServices();
   }, [dispatch]);
+
+  useEffect(() => {
+    loadServices();
+  }, [loadServices]);
 
   const renderServices = services =>
     services.map(service => <ServiceItem key={service.id} service={service} />);
