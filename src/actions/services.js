@@ -2,6 +2,7 @@ import {
   FETCH_SERVICES_SUCCESS,
   FETCH_SERVICE_SUCCESS,
   REQUEST_SERVICE,
+  FETCH_USER_SERVICES_SUCCESS,
 } from '../types';
 
 import db from '../db';
@@ -21,6 +22,30 @@ export const fetchServices = () => {
       }));
 
       dispatch({ type: FETCH_SERVICES_SUCCESS, services });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+/**
+ * ------------------------------------------
+ * Fetch User Services
+ * ------------------------------------------
+ */
+export const fetchUserServices = userId => {
+  return async dispatch => {
+    try {
+      const snapshot = await db
+        .collection('services')
+        .where('user', '==', userId)
+        .get();
+      const userServices = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      dispatch({ type: FETCH_USER_SERVICES_SUCCESS, userServices });
     } catch (error) {
       console.log(error);
     }

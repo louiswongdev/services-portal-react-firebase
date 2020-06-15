@@ -10,6 +10,7 @@ import Register from './pages/Register';
 import ServiceDetail from './pages/ServiceDetail';
 import Secret from './pages/Secret';
 import ServiceCreate from './pages/services/ServiceCreate';
+import UserServices from './pages/services/UserServices';
 
 const Routes = () => {
   return (
@@ -17,6 +18,7 @@ const Routes = () => {
       <Route path="/secret" component={Secret} />
       <Route path="/register" exact component={Register} />
       <Route path="/login" exact component={Login} />
+      <Route path="/services/me" exact component={UserServices} />
       <Route path="/services/new" exact component={ServiceCreate} />
       <Route path="/services/:serviceId" exact component={ServiceDetail} />
       <Route path="/services" exact component={Services} />

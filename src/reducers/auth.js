@@ -1,4 +1,8 @@
-import { SET_AUTH_USER, RESET_AUTH_STATE } from '../types';
+import {
+  SET_AUTH_USER,
+  RESET_AUTH_STATE,
+  FETCH_USER_SERVICES_SUCCESS,
+} from '../types';
 
 const INITIAL_STATE = {
   user: null,
@@ -19,6 +23,12 @@ const auth = (state = INITIAL_STATE, action) => {
         ...state,
         isAuthResolved: false,
       };
+    case FETCH_USER_SERVICES_SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user, services: action.userServices },
+      };
+
     default:
       return state;
   }
