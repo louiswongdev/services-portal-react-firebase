@@ -31,6 +31,11 @@ $muted-grey: #999;
 $section-grey: #fbfbfb;
 
 
+// MODAL
+.modal {
+    text-align-last: left !important;
+}
+
 //  AUTH Start
 .auth-page {
     .hero.is-success {

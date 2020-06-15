@@ -15,7 +15,7 @@ const Register = () => {
 
   const registerUser = async userData => {
     try {
-      const user = await register(userData);
+      await register(userData);
       setRedirect(true);
       // history.push('/');
     } catch (error) {

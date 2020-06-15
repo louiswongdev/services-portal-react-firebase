@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchServiceById } from '../actions';
 import Spinner from '../components/Spinner';
+import OfferModal from '../components/service/OfferModal';
 
 const ServiceDetail = () => {
   const { serviceId } = useParams();
@@ -33,26 +34,13 @@ const ServiceDetail = () => {
               <h1 className="title is-2">{service.title}</h1>
               <h2 className="subtitle is-4">{service.description}</h2>
               <br />
-              <p className="has-text-centered">
-                <button className="button is-medium is-info is-outlined">
-                  Learn more
-                </button>
-              </p>
+              <div className="has-text-centered">
+                <OfferModal service={service} />
+              </div>
             </div>
           </div>
         </div>
       </div>
-      {/* <div className="hero-foot">
-        <div className="container">
-          <div className="tabs is-centered">
-            <ul>
-              <li>
-                <a>And this is the bottom</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div> */}
     </section>
   );
 };

@@ -3,7 +3,7 @@ import withAuthorization from '../../components/hoc/withAuthorization';
 import { fetchUserServices } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 
-import ServiceItem from '../../components/ServiceItem';
+import ServiceItem from '../../components/service/ServiceItem';
 
 const UserServices = ({ auth: { user } }) => {
   const userServices = useSelector(state => state.auth.user.services);

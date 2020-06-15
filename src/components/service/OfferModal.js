@@ -1,0 +1,76 @@
+import React from 'react';
+import Modal from '../Modal';
+import { useState } from 'react';
+
+const OfferModal = ({ service }) => {
+  const [offer, setOffer] = useState({
+    fromUser: '',
+    toUser: '',
+    serviceId: '',
+    status: 'pending',
+    price: 0,
+    time: 0,
+    note: '',
+  });
+
+  const handleChange = ({ target: { value, name } }) => {
+    if (name === 'time') {
+      const price = Math.round(value * service.price * 100) / 100;
+      return setOffer({
+        ...offer,
+        [name]: value,
+        price,
+      });
+    }
+
+    return setOffer({
+      ...offer,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = () => {
+    console.log(offer);
+  };
+
+  return (
+    <Modal onModalSubmit={handleSubmit} openButtonText="Make an offer">
+      <div className="field">
+        <input
+          onChange={handleChange}
+          name="note"
+          className="input is-large"
+          type="text"
+          placeholder="Write some catchy note"
+          max="5"
+          min="0"
+          autoFocus=""
+        />
+        <p className="help">Note can increase chance of getting the service</p>
+      </div>
+      <div className="field">
+        <input
+          onChange={handleChange}
+          name="time"
+          className="input is-large"
+          type="number"
+          placeholder="How long you need service for ?"
+          max="5"
+          min="0"
+          autoFocus=""
+        />
+        <p className="help">Enter time in hours</p>
+      </div>
+      <div className="service-price has-text-centered">
+        <div className="service-price-title">
+          Uppon acceptance "Filip Jerga" will charge you:
+        </div>
+        <div className="service-price-value">
+          <h1 className="title">${offer.price}</h1>
+        </div>
+      </div>
+    </Modal>
+  );
+};
+
+export default OfferModal;

@@ -1,9 +1,8 @@
 // /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useCallback, memo } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { connect } from 'react-redux'; // HOC
 
-import ServiceItem from '../components/ServiceItem';
+import ServiceItem from '../components/service/ServiceItem';
 import Hero from '../components/Hero';
 import { fetchServices } from '../actions';
 
