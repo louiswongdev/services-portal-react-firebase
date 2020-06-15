@@ -6,6 +6,7 @@ import {
 } from '../types';
 
 import db from '../db';
+import { createRef } from '.';
 
 /**
  * ------------------------------------------
@@ -74,6 +75,8 @@ export const fetchServiceById = id => {
       // const snapshot = await db.collection(`services/${id}`).get();
       const snapshot = await db.collection('services').doc(id).get();
       const service = { id: snapshot.id, ...snapshot.data() };
+      const user = await service.user.get();
+      service.user = user.data();
 
       dispatch({
         type: FETCH_SERVICE_SUCCESS,
@@ -90,11 +93,12 @@ export const fetchServiceById = id => {
  * Create Service
  * ------------------------------------------
  */
+
 export const createService = (newService, userId) => {
   return async dispatch => {
     const service = {
       ...newService,
-      user: userId,
+      user: createRef('profiles', userId),
       price: parseInt(newService.price, 10),
       createdAt: new Date(),
     };
