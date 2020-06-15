@@ -21,8 +21,8 @@ export const fetchServices = () => {
       }));
 
       dispatch({ type: FETCH_SERVICES_SUCCESS, services });
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   };
 };
@@ -54,8 +54,30 @@ export const fetchServiceById = id => {
         type: FETCH_SERVICE_SUCCESS,
         service,
       });
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+/**
+ * ------------------------------------------
+ * Create Service
+ * ------------------------------------------
+ */
+export const createService = (newService, userId) => {
+  return async dispatch => {
+    const service = {
+      ...newService,
+      user: userId,
+      price: parseInt(newService.price, 10),
+      createdAt: new Date(),
+    };
+
+    try {
+      await db.collection('services').add(service);
+    } catch (error) {
+      console.log(error);
     }
   };
 };

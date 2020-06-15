@@ -130,6 +130,7 @@ export const storeAuthUser = authUser => {
     if (authUser) {
       try {
         const userWithProfile = await getUserProfile(authUser.uid);
+        // dispatch({ type: RESET_AUTH_STATE });
         dispatch({ type: SET_AUTH_USER, user: userWithProfile });
       } catch (error) {
         console.log(error.message);

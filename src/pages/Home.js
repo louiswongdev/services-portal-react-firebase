@@ -46,7 +46,9 @@ function Home() {
           </div>
 
           <div className="content-wrapper">
-            <div className="columns">{renderServices(services)}</div>
+            <div className="columns is-multiline">
+              {renderServices(services)}
+            </div>
           </div>
         </div>
       </section>
