@@ -1,17 +1,23 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import Modal from '../Modal';
 import { useState } from 'react';
+import { createRef, createOffer } from '../../actions';
 
-const OfferModal = ({ service }) => {
+import { useToasts } from 'react-toast-notifications';
+
+const OfferModal = ({ service, auth }) => {
   const [offer, setOffer] = useState({
     fromUser: '',
     toUser: '',
-    serviceId: '',
+    service: '',
     status: 'pending',
     price: 0,
     time: 0,
     note: '',
   });
+  const dispatch = useDispatch();
+  const { addToast } = useToasts();
 
   const handleChange = ({ target: { value, name } }) => {
     if (name === 'time') {
@@ -29,8 +35,33 @@ const OfferModal = ({ service }) => {
     });
   };
 
-  const handleSubmit = () => {
-    console.log(offer);
+  const handleSubmit = async closeModal => {
+    // add additional properties to offer. Let's create a copy
+    // so we don't could component to re-render
+    const offerCopy = {
+      ...offer,
+      fromUser: createRef('profiles', auth.user.uid),
+      toUser: createRef('profiles', service.user.uid),
+      service: createRef('service', service.id),
+      time: parseInt(offer.time, 10),
+    };
+    console.log(offerCopy);
+
+    try {
+      await dispatch(createOffer(offerCopy));
+      closeModal();
+      addToast('Offer was successfully created!', {
+        appearance: 'success',
+        autoDismiss: true,
+        autoDismissTimeout: 3000,
+      });
+    } catch (error) {
+      addToast(error.message, {
+        appearance: 'error',
+        autoDismiss: true,
+        autoDismissTimeout: 3000,
+      });
+    }
   };
 
   return (

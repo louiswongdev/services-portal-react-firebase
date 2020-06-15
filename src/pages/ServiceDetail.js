@@ -9,6 +9,7 @@ const ServiceDetail = () => {
   const { serviceId } = useParams();
   const dispatch = useDispatch();
   const service = useSelector(state => state.selectedService.item);
+  const auth = useSelector(state => state.auth);
   const isFetching = useSelector(state => state.selectedService.isFetching);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const ServiceDetail = () => {
               <h2 className="subtitle is-4">{service.description}</h2>
               <br />
               <div className="has-text-centered">
-                <OfferModal service={service} />
+                <OfferModal service={service} auth={auth} />
               </div>
             </div>
           </div>
