@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { FETCH_OFFERS_SUCCESS, CHANGE_OFFER_STATUS } from '../types';
 
 const createOfferList = offersType => {
   return (state = [], action) => {
@@ -10,8 +11,16 @@ const createOfferList = offersType => {
     }
 
     switch (action.type) {
-      case 'FETCH_OFFERS_SUCCESS':
+      case FETCH_OFFERS_SUCCESS:
         return action.offers;
+      case CHANGE_OFFER_STATUS:
+        // find offer being accepted/declined in our array of offers
+        // in redux state. Then update its status
+        const newState = [...state];
+        const offerIndex = newState.findIndex(o => o.id === action.offerId);
+        newState[offerIndex].status = action.status;
+
+        return newState;
       default:
         return state;
     }

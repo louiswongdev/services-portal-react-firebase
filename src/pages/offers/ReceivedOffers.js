@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import withAuthorization from '../../components/hoc/withAuthorization';
 import { useDispatch, useSelector } from 'react-redux';
 import ServiceItem from '../../components/service/ServiceItem';
-import { fetchReceivedOffers } from '../../actions';
+import { fetchReceivedOffers, changeOfferStatus } from '../../actions';
 
 const ReceivedOffers = ({ auth }) => {
   const offers = useSelector(state => state.offers.received);
@@ -12,13 +12,12 @@ const ReceivedOffers = ({ auth }) => {
     dispatch(fetchReceivedOffers(auth.user.uid));
   }, [auth.user.uid, dispatch]);
 
-  const acceptOffer = offer => {
-    // console.log(`Accepting ${JSON.stringify(offer)}`);
-    console.log(offer);
+  const handleAcceptOffer = offerId => {
+    dispatch(changeOfferStatus(offerId, 'accepted'));
   };
 
-  const declineOffer = offer => {
-    console.log(offer);
+  const handleDeclineOffer = offerId => {
+    dispatch(changeOfferStatus(offerId, 'declined'));
   };
 
   const statusClass = status => {
@@ -62,13 +61,13 @@ const ReceivedOffers = ({ auth }) => {
                   <div>
                     <hr />
                     <button
-                      onClick={() => acceptOffer(offer)}
+                      onClick={() => handleAcceptOffer(offer.id)}
                       className="button is-success s-m-r"
                     >
                       Accept
                     </button>
                     <button
-                      onClick={() => declineOffer(offer)}
+                      onClick={() => handleDeclineOffer(offer.id)}
                       className="button is-danger"
                     >
                       Decline

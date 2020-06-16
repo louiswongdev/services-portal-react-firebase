@@ -1,6 +1,6 @@
 import db from '../db';
 import { createRef } from '.';
-import { FETCH_OFFERS_SUCCESS } from '../types';
+import { FETCH_OFFERS_SUCCESS, CHANGE_OFFER_STATUS } from '../types';
 
 /**
  * ------------------------------------------
@@ -93,4 +93,19 @@ export const fetchReceivedOffers = userId => async dispatch => {
   } catch (error) {
     console.log(error);
   }
+};
+
+/**
+ * ------------------------------------------
+ * Change offer status
+ * ------------------------------------------
+ */
+export const changeOfferStatus = (offerId, status) => async dispatch => {
+  await db.collection('offers').doc(offerId).update({ status });
+  dispatch({
+    type: CHANGE_OFFER_STATUS,
+    status,
+    offerId,
+    offersType: 'received',
+  });
 };
