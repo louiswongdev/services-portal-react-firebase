@@ -12,6 +12,21 @@ const ReceivedOffers = ({ auth }) => {
     dispatch(fetchReceivedOffers(auth.user.uid));
   }, [auth.user.uid, dispatch]);
 
+  const acceptOffer = offer => {
+    // console.log(`Accepting ${JSON.stringify(offer)}`);
+    console.log(offer);
+  };
+
+  const declineOffer = offer => {
+    console.log(offer);
+  };
+
+  const statusClass = status => {
+    if (status === 'pending') return 'is-warning';
+    if (status === 'accepted') return 'is-success';
+    if (status === 'declined') return 'is-danger';
+  };
+
   return (
     <div className="container">
       <div className="content-wrapper">
@@ -24,12 +39,14 @@ const ReceivedOffers = ({ auth }) => {
                 className="offer-card"
                 service={offer.service}
               >
-                <div className="tag is-large">{offer.status}</div>
+                <div className={`tag is-large ${statusClass(offer.status)}`}>
+                  {offer.status}
+                </div>
                 <hr />
                 <div className="service-offer">
                   <div>
                     <span className="label">From User:</span>{' '}
-                    {offer.toUser.fullName}
+                    {offer.fromUser.fullName}
                   </div>
                   <div>
                     <span className="label">Note:</span> {offer.note}
@@ -41,6 +58,23 @@ const ReceivedOffers = ({ auth }) => {
                     <span className="label">Time:</span> {offer.time} hours
                   </div>
                 </div>
+                {offer.status === 'pending' && (
+                  <div>
+                    <hr />
+                    <button
+                      onClick={() => acceptOffer(offer)}
+                      className="button is-success s-m-r"
+                    >
+                      Accept
+                    </button>
+                    <button
+                      onClick={() => declineOffer(offer)}
+                      className="button is-danger"
+                    >
+                      Decline
+                    </button>
+                  </div>
+                )}
               </ServiceItem>
             </div>
           ))}

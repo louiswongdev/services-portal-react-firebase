@@ -28,8 +28,8 @@ const SentOffers = ({ auth }) => {
                 <hr />
                 <div className="service-offer">
                   <div>
-                    <span className="label">From User:</span>{' '}
-                    {offer.fromUser.fullName}
+                    <span className="label">To User:</span>{' '}
+                    {offer.toUser.fullName}
                   </div>
                   <div>
                     <span className="label">Note:</span> {offer.note}

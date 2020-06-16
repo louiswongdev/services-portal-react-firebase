@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const ServiceItem = ({ service }) => {
+const ServiceItem = ({ service, children, className, noButton }) => {
   const shortText = (text, maxLength = 50) => {
     if (!text) {
       return '';
@@ -17,7 +17,7 @@ const ServiceItem = ({ service }) => {
   return (
     <div className="column is-one-third">
       <div
-        className="feature-card is-bordered has-text-centered revealOnScroll delay-1"
+        className={`${className} feature-card is-bordered has-text-centered revealOnScroll delay-1`}
         data-animation="fadeInLeft"
       >
         <div className="card-title">
@@ -29,14 +29,17 @@ const ServiceItem = ({ service }) => {
         <div className="card-text">
           <p>{shortText(service.description)}</p>
         </div>
-        <div className="card-action">
-          <Link
-            to={`/services/${service.id}`}
-            className="button btn-align-md accent-btn raised"
-          >
-            Learn More
-          </Link>
-        </div>
+        {children && <div className="card-text">{children}</div>}
+        {!noButton && (
+          <div className="card-action">
+            <Link
+              to={`/services/${service.id}`}
+              className="button btn-align-md accent-btn raised"
+            >
+              Learn More
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
