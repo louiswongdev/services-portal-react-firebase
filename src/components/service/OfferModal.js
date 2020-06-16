@@ -45,18 +45,27 @@ const OfferModal = ({ service, auth }) => {
       service: createRef('services', service.id),
       time: parseInt(offer.time, 10),
     };
-    console.log(offerCopy);
 
-    try {
-      await dispatch(createOffer(offerCopy));
-      closeModal();
-      addToast('Offer was successfully created!', {
-        appearance: 'success',
-        autoDismiss: true,
-        autoDismissTimeout: 3000,
-      });
-    } catch (error) {
-      addToast(error.message, {
+    // make sure offer form fields (note and time) are filled out
+    // before submitting and closing modal
+    if (offer.note !== '' && offer.time !== 0) {
+      try {
+        await dispatch(createOffer(offerCopy));
+        closeModal();
+        addToast('Offer was successfully created!', {
+          appearance: 'success',
+          autoDismiss: true,
+          autoDismissTimeout: 3000,
+        });
+      } catch (error) {
+        addToast(error.message, {
+          appearance: 'error',
+          autoDismiss: true,
+          autoDismissTimeout: 3000,
+        });
+      }
+    } else {
+      addToast('Please fill in all fields ', {
         appearance: 'error',
         autoDismiss: true,
         autoDismissTimeout: 3000,
@@ -76,6 +85,7 @@ const OfferModal = ({ service, auth }) => {
           max="5"
           min="0"
           autoFocus=""
+          required
         />
         <p className="help">Note can increase chance of getting the service</p>
       </div>
@@ -89,6 +99,7 @@ const OfferModal = ({ service, auth }) => {
           max="5"
           min="0"
           autoFocus=""
+          required
         />
         <p className="help">Enter time in hours</p>
       </div>
