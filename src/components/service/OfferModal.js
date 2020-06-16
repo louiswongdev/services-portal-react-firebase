@@ -42,7 +42,7 @@ const OfferModal = ({ service, auth }) => {
       ...offer,
       fromUser: createRef('profiles', auth.user.uid),
       toUser: createRef('profiles', service.user.uid),
-      service: createRef('service', service.id),
+      service: createRef('services', service.id),
       time: parseInt(offer.time, 10),
     };
     console.log(offerCopy);
