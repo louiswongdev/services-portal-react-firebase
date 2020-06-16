@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import withAuthorization from '../../components/hoc/withAuthorization';
 import ServiceItem from '../../components/service/ServiceItem';
-import { fetchSentOffers } from '../../actions';
+import { fetchSentOffers, createCollaboration } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { newCollaboration, newMessage } from '../../helpers/offers';
 
 const SentOffers = ({ auth }) => {
   const offers = useSelector(state => state.offers.sent);
@@ -11,6 +12,19 @@ const SentOffers = ({ auth }) => {
   useEffect(() => {
     dispatch(fetchSentOffers(auth.user.uid));
   }, [auth.user.uid, dispatch]);
+
+  const handleCreateCollaboration = async offer => {
+    const collaboration = newCollaboration({ offer, fromUser: auth.user });
+    const message = newMessage({ offer, fromUser: auth.user });
+
+    try {
+      createCollaboration({ collaboration, message });
+    } catch (error) {
+      console.log(error);
+    }
+    // console.log(collaboration);
+    // console.log(message);
+  };
 
   return (
     <div className="container">
@@ -41,6 +55,17 @@ const SentOffers = ({ auth }) => {
                     <span className="label">Time:</span> {offer.time} hours
                   </div>
                 </div>
+                {offer.status === 'accepted' && (
+                  <div>
+                    <hr />
+                    <button
+                      onClick={() => handleCreateCollaboration(offer)}
+                      className="button is-success"
+                    >
+                      Collaborate
+                    </button>
+                  </div>
+                )}
               </ServiceItem>
             </div>
           ))}
