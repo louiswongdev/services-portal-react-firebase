@@ -4,10 +4,13 @@ import ServiceItem from '../../components/service/ServiceItem';
 import { fetchSentOffers, createCollaboration } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { newCollaboration, newMessage } from '../../helpers/offers';
+import { useToasts } from 'react-toast-notifications';
 
 const SentOffers = ({ auth }) => {
   const offers = useSelector(state => state.offers.sent);
   const dispatch = useDispatch();
+
+  const { addToast } = useToasts();
 
   useEffect(() => {
     dispatch(fetchSentOffers(auth.user.uid));
@@ -18,9 +21,18 @@ const SentOffers = ({ auth }) => {
     const message = newMessage({ offer, fromUser: auth.user });
 
     try {
-      createCollaboration({ collaboration, message });
+      await dispatch(createCollaboration({ collaboration, message }));
+      addToast('Offer was successfully created!', {
+        appearance: 'success',
+        autoDismiss: true,
+        autoDismissTimeout: 3000,
+      });
     } catch (error) {
-      console.log(error);
+      addToast(error.message, {
+        appearance: 'error',
+        autoDismiss: true,
+        autoDismissTimeout: 3000,
+      });
     }
     // console.log(collaboration);
     // console.log(message);
@@ -55,7 +67,7 @@ const SentOffers = ({ auth }) => {
                     <span className="label">Time:</span> {offer.time} hours
                   </div>
                 </div>
-                {offer.status === 'accepted' && (
+                {offer.status === 'accepted' && !offer.collaborationCreated && (
                   <div>
                     <hr />
                     <button

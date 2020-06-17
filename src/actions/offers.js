@@ -102,11 +102,15 @@ export const fetchReceivedOffers = userId => async dispatch => {
  * ------------------------------------------
  */
 export const changeOfferStatus = (offerId, status) => async dispatch => {
-  await db.collection('offers').doc(offerId).update({ status });
-  dispatch({
-    type: CHANGE_OFFER_STATUS,
-    status,
-    offerId,
-    offersType: 'received',
-  });
+  try {
+    await db.collection('offers').doc(offerId).update({ status });
+    dispatch({
+      type: CHANGE_OFFER_STATUS,
+      status,
+      offerId,
+      offersType: 'received',
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
