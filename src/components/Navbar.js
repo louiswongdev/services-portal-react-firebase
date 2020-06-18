@@ -3,10 +3,11 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../actions';
+import ReceivedMessages from './ReceivedMessages';
 
 const Navbar = ({ auth: { user, isAuth }, id, loadFresh }) => {
   const dispatch = useDispatch();
-
+  // debugger;
   const handleLogout = () => {
     dispatch(logout());
   };
@@ -119,24 +120,33 @@ const Navbar = ({ auth: { user, isAuth }, id, loadFresh }) => {
               Profile
             </Link>
             {isAuth && (
-              <div className="navbar-item has-dropdown is-hoverable">
-                <a className="navbar-link">Manage</a>
+              <>
+                <div className="navbar-item has-dropdown is-hoverable">
+                  <a className="navbar-link">Manage</a>
 
-                <div className="navbar-dropdown">
-                  <Link to="/services/new" className="navbar-item">
-                    Create Service
-                  </Link>
-                  <Link to="/services/me" className="navbar-item">
-                    Your Services
-                  </Link>
-                  <Link to="/offers/sent" className="navbar-item">
-                    Sent Offers
-                  </Link>
-                  <Link to="/offers/received" className="navbar-item">
-                    Received Offers
-                  </Link>
+                  <div className="navbar-dropdown">
+                    <Link to="/services/new" className="navbar-item">
+                      Create Service
+                    </Link>
+                    <Link to="/services/me" className="navbar-item">
+                      Your Services
+                    </Link>
+                    <Link to="/offers/sent" className="navbar-item">
+                      Sent Offers
+                    </Link>
+                    <Link to="/offers/received" className="navbar-item">
+                      Received Offers
+                    </Link>
+                  </div>
                 </div>
-              </div>
+                <div className="navbar-item has-dropdown is-hoverable">
+                  <a className="navbar-link">Messages</a>
+                  <div className="navbar-dropdown navbar-dropdown-messages">
+                    {user.messages && <ReceivedMessages />}
+                    {/* <ReceivedMessages /> */}
+                  </div>
+                </div>
+              </>
             )}
             {!isAuth && (
               <>

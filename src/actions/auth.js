@@ -1,6 +1,10 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { SET_AUTH_USER, RESET_AUTH_STATE } from '../types';
+import {
+  SET_AUTH_USER,
+  RESET_AUTH_STATE,
+  SET_AUTH_USER_LOGOUT,
+} from '../types';
 import db from '../db';
 
 /**
@@ -104,7 +108,7 @@ export const logout = () => {
   return async dispatch => {
     await firebase.auth().signOut();
     // dispatch({ type: RESET_AUTH_STATE });
-    dispatch({ type: SET_AUTH_USER, user: null });
+    dispatch({ type: SET_AUTH_USER_LOGOUT, user: null });
   };
 };
 

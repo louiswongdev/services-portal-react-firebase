@@ -33,6 +33,39 @@ $section-grey: #fbfbfb;
 @import './styles/auth.scss';
 @import './styles/services.scss';
 
+.navbar-dropdown { padding-top: 0 }
+
+.navbar-dropdown-messages {
+  min-width: 320px !important;
+
+  .from-user {
+    padding-left: 20px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+
+    span {
+      font-weight: bold;
+    }
+  }
+
+  hr {
+    margin: 0;
+  }
+
+  .navbar-item-message {
+    white-space: normal;
+  }
+
+  .user-message {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f3920069;
+}
+
+//   .navbar-dropdown-messages .navbar-item-message {
+//       padding-bottom: 30px;
+//   }
+}
+
 
 .s-m-r {
     margin-right: 5px;
@@ -43,19 +76,10 @@ $section-grey: #fbfbfb;
     padding-bottom: 20px;
 }
 
-
-  
-
-
 // MODAL
 .modal {
     text-align-last: left !important;
 }
-
-
-
-
-
 /* ==========================================================================
 General Keyframes animations
 ========================================================================== */
