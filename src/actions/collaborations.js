@@ -2,7 +2,6 @@ import db from '../db';
 import {
   COLLABORATION_CREATED_FROM_OFFER,
   FETCH_USER_MESSAGES_SUCCESS,
-  MARK_MESSAGE_AS_READ,
 } from '../types';
 
 /**
@@ -102,8 +101,6 @@ export const markMessageAsRead = async message => {
       .collection('messages')
       .doc(message.id)
       .update({ isRead: true });
-
-    // dispatch({ type: MARK_MESSAGE_AS_READ, messageId: message.id });
   } catch (error) {
     console.log(error.message);
   }

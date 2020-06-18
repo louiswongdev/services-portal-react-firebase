@@ -1,11 +1,10 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { markMessageAsRead } from '../actions';
 
 const ReceivedMessages = () => {
   const messages = useSelector(state => state.auth.user.messages);
-  // const dispatch = useDispatch();
 
   const handleMessageAsRead = message => {
     markMessageAsRead(message);
