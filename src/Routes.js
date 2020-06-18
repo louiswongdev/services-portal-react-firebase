@@ -14,6 +14,7 @@ import UserServices from './pages/services/UserServices';
 import SentOffers from './pages/offers/SentOffers';
 import ReceivedOffers from './pages/offers/ReceivedOffers';
 import ReceivedCollaborations from './pages/collaborations/ReceivedCollaborations';
+import CollaborationDetail from './pages/collaborations/CollaborationDetail';
 
 const Routes = () => {
   return (
@@ -26,6 +27,7 @@ const Routes = () => {
         exact
         component={ReceivedCollaborations}
       />
+      <Route path="/collaborations/:id" exact component={CollaborationDetail} />
       <Route path="/offers/sent/" exact component={SentOffers} />
       <Route path="/offers/received/" exact component={ReceivedOffers} />
       <Route path="/services/me" exact component={UserServices} />
