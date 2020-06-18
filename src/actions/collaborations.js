@@ -2,6 +2,7 @@ import db from '../db';
 import {
   COLLABORATION_CREATED_FROM_OFFER,
   FETCH_USER_MESSAGES_SUCCESS,
+  MARK_MESSAGE_AS_READ,
 } from '../types';
 
 /**
@@ -87,3 +88,23 @@ export const subscribeToMessages = userId => dispatch => {
 //   subscribeToMessages1(userId, messages =>
 //     dispatch({ type: FETCH_USER_MESSAGES_SUCCESS, messages }),
 //   );
+
+/**
+ * ------------------------------------------
+ * Mark message as read
+ * ------------------------------------------
+ */
+export const markMessageAsRead = async message => {
+  try {
+    await db
+      .collection('profiles')
+      .doc(message.toUser)
+      .collection('messages')
+      .doc(message.id)
+      .update({ isRead: true });
+
+    // dispatch({ type: MARK_MESSAGE_AS_READ, messageId: message.id });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
