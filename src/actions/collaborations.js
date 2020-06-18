@@ -105,3 +105,35 @@ export const markMessageAsRead = async message => {
     console.log(error.message);
   }
 };
+
+/**
+ * ------------------------------------------
+ * Fetch Collaborations
+ * ------------------------------------------
+ */
+export const fetchCollaborations = async userId => {
+  try {
+    const snapshot = await db
+      .collection('collaborations')
+      .where('allowedPeople', 'array-contains', userId)
+      .get();
+
+    const collaborations = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return collaborations;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+// export const fetchCollaborations = async userId => {
+//   const snapshot = await db.collection('collaborations')
+//     .where('allowedPeople', '==', 'array-contains', userId)
+//     .get()
+//     .then(snapshot =>
+//       snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })),
+//     );
+// };

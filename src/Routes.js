@@ -13,6 +13,7 @@ import ServiceCreate from './pages/services/ServiceCreate';
 import UserServices from './pages/services/UserServices';
 import SentOffers from './pages/offers/SentOffers';
 import ReceivedOffers from './pages/offers/ReceivedOffers';
+import ReceivedCollaborations from './pages/collaborations/ReceivedCollaborations';
 
 const Routes = () => {
   return (
@@ -20,6 +21,11 @@ const Routes = () => {
       <Route path="/secret" component={Secret} />
       <Route path="/register" exact component={Register} />
       <Route path="/login" exact component={Login} />
+      <Route
+        path="/collaborations/me"
+        exact
+        component={ReceivedCollaborations}
+      />
       <Route path="/offers/sent/" exact component={SentOffers} />
       <Route path="/offers/received/" exact component={ReceivedOffers} />
       <Route path="/services/me" exact component={UserServices} />
