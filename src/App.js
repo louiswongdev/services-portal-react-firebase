@@ -6,15 +6,27 @@ import store from './store';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ServiceApp from './ServiceApp';
 
-import { onAuthStateChanged, storeAuthUser } from './actions';
+import {
+  onAuthStateChanged,
+  storeAuthUser,
+  subscribeToMessages,
+} from './actions';
 
 function App() {
   useEffect(() => {
+    let unsubscribeMessages;
     const unsubscribeAuth = onAuthStateChanged(authUser => {
       store.dispatch(storeAuthUser(authUser));
+
+      if (authUser) {
+        unsubscribeMessages = store.dispatch(subscribeToMessages(authUser.uid));
+      }
     });
 
-    return () => unsubscribeAuth();
+    return () => {
+      unsubscribeAuth();
+      unsubscribeMessages();
+    };
   }, []);
 
   return (
@@ -31,13 +43,20 @@ function App() {
 // class App extends React.Component {
 //   componentDidMount() {
 //     this.unsubscribeAuth = onAuthStateChanged(authUser => {
-//       store.dispatch(resetAuthState());
+//       // store.dispatch(resetAuthState());
 //       store.dispatch(storeAuthUser(authUser));
+//       if (authUser) {
+//         this.unsubscribeMessages = store.dispatch(
+//           subscribeToMessages(authUser.uid),
+//         );
+//         // debugger;
+//       }
 //     });
 //   }
 
 //   componentWillUnmount() {
 //     this.unsubscribeAuth();
+//     this.unsubscribeMessages();
 //   }
 
 //   render() {

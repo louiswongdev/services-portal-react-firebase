@@ -2,6 +2,7 @@ import {
   SET_AUTH_USER,
   RESET_AUTH_STATE,
   FETCH_USER_SERVICES_SUCCESS,
+  FETCH_USER_MESSAGES_SUCCESS,
 } from '../types';
 
 const INITIAL_STATE = {
@@ -28,7 +29,11 @@ const auth = (state = INITIAL_STATE, action) => {
         ...state,
         user: { ...state.user, services: action.userServices },
       };
-
+    case FETCH_USER_MESSAGES_SUCCESS:
+      return {
+        ...state,
+        user: { ...state.user, messages: action.messages },
+      };
     default:
       return state;
   }

@@ -1,5 +1,9 @@
 import db from '../db';
-import { COLLABORATION_CREATED_FROM_OFFER } from '../types';
+import {
+  COLLABORATION_CREATED_FROM_OFFER,
+  FETCH_USER_MESSAGES_SUCCESS,
+} from '../types';
+
 /**
  * ------------------------------------------
  * Create collaboration
@@ -46,3 +50,40 @@ export const createMessage = async message => {
     .collection('messages') // create sub-collection inside profile of user
     .add(message);
 };
+
+/**
+ * ------------------------------------------
+ * Subscribe to messages
+ * ------------------------------------------
+ */
+export const subscribeToMessages = userId => dispatch => {
+  return db
+    .collection('profiles')
+    .doc(userId)
+    .collection('messages')
+    .onSnapshot(snapshot => {
+      const messages = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      dispatch({ type: FETCH_USER_MESSAGES_SUCCESS, messages });
+    });
+};
+
+// const subscribeToMessages1 = (userId, callback) =>
+//   db
+//     .collection('profiles')
+//     .doc(userId)
+//     .collection('messages')
+//     .onSnapshot(snapshot => {
+//       const messages = snapshot.docs.map(doc => ({
+//         id: doc.id,
+//         ...doc.data(),
+//       }));
+//       callback(messages);
+//     });
+
+// export const subscribeToMessages = userId => dispatch =>
+//   subscribeToMessages1(userId, messages =>
+//     dispatch({ type: FETCH_USER_MESSAGES_SUCCESS, messages }),
+//   );
