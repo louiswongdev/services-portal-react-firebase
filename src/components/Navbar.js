@@ -102,7 +102,7 @@ const Navbar = ({ auth: { user, isAuth }, id, loadFresh }) => {
           </div>
 
           <div className="navbar-end">
-            {user && (
+            {isAuth && (
               <div className="navbar-item is-secondary user-welcome">
                 {`Hi ${user.fullName}`}
               </div>

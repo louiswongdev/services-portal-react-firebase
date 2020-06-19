@@ -11,6 +11,7 @@ import {
   storeAuthUser,
   subscribeToMessages,
 } from './actions';
+import { checkUserConnection } from './actions/connection';
 
 function App() {
   useEffect(() => {
@@ -19,6 +20,7 @@ function App() {
       store.dispatch(storeAuthUser(authUser));
 
       if (authUser) {
+        checkUserConnection(authUser.uid);
         unsubscribeMessages = store.dispatch(subscribeToMessages(authUser.uid));
       }
     });
@@ -46,6 +48,7 @@ function App() {
 //       // store.dispatch(resetAuthState());
 //       store.dispatch(storeAuthUser(authUser));
 //       if (authUser) {
+//         checkUserConnection(authUser.uid);
 //         this.unsubscribeMessages = store.dispatch(
 //           subscribeToMessages(authUser.uid),
 //         );
