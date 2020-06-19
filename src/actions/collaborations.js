@@ -2,6 +2,8 @@ import db from '../db';
 import {
   COLLABORATION_CREATED_FROM_OFFER,
   FETCH_USER_MESSAGES_SUCCESS,
+  SET_COLLABORATION,
+  SET_COLLABORATION_JOINED_PEOPLE,
 } from '../types';
 
 /**
@@ -53,43 +55,6 @@ export const createMessage = async message => {
 
 /**
  * ------------------------------------------
- * Subscribe to messages
- * ------------------------------------------
- */
-export const subscribeToMessages = userId => dispatch => {
-  return db
-    .collection('profiles')
-    .doc(userId)
-    .collection('messages')
-    .onSnapshot(snapshot => {
-      const messages = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      dispatch({ type: FETCH_USER_MESSAGES_SUCCESS, messages });
-    });
-};
-
-// const subscribeToMessages1 = (userId, callback) =>
-//   db
-//     .collection('profiles')
-//     .doc(userId)
-//     .collection('messages')
-//     .onSnapshot(snapshot => {
-//       const messages = snapshot.docs.map(doc => ({
-//         id: doc.id,
-//         ...doc.data(),
-//       }));
-//       callback(messages);
-//     });
-
-// export const subscribeToMessages = userId => dispatch =>
-//   subscribeToMessages1(userId, messages =>
-//     dispatch({ type: FETCH_USER_MESSAGES_SUCCESS, messages }),
-//   );
-
-/**
- * ------------------------------------------
  * Mark message as read
  * ------------------------------------------
  */
@@ -129,11 +94,65 @@ export const fetchCollaborations = async userId => {
   }
 };
 
-// export const fetchCollaborations = async userId => {
-//   const snapshot = await db.collection('collaborations')
-//     .where('allowedPeople', '==', 'array-contains', userId)
-//     .get()
-//     .then(snapshot =>
-//       snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })),
-//     );
-// };
+/**
+ * ------------------------------------------
+ * Subscribe to Collaborations
+ * ------------------------------------------
+ */
+export const subToCollaboration = collabId => dispatch => {
+  const collabRef = db.collection('collaborations').doc(collabId);
+
+  return collabRef.onSnapshot(async snapshot => {
+    const collaboration = { id: snapshot.id, ...snapshot.data() };
+
+    let joinedPeople = [];
+    if (collaboration.joinedPeople) {
+      joinedPeople = await Promise.all(
+        collaboration.joinedPeople.map(async userRef => {
+          const userSnapshot = await userRef.get();
+          return { id: userSnapshot.id, ...userSnapshot.data() };
+        }),
+      );
+    }
+
+    dispatch({ type: SET_COLLABORATION, collaboration });
+    dispatch({ type: SET_COLLABORATION_JOINED_PEOPLE, joinedPeople });
+  });
+};
+
+/**
+ * ------------------------------------------
+ * Subscribe to messages
+ * ------------------------------------------
+ */
+export const subscribeToMessages = userId => dispatch => {
+  return db
+    .collection('profiles')
+    .doc(userId)
+    .collection('messages')
+    .onSnapshot(snapshot => {
+      const messages = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      dispatch({ type: FETCH_USER_MESSAGES_SUCCESS, messages });
+    });
+};
+
+// const subscribeToMessages1 = (userId, callback) =>
+//   db
+//     .collection('profiles')
+//     .doc(userId)
+//     .collection('messages')
+//     .onSnapshot(snapshot => {
+//       const messages = snapshot.docs.map(doc => ({
+//         id: doc.id,
+//         ...doc.data(),
+//       }));
+//       callback(messages);
+//     });
+
+// export const subscribeToMessages = userId => dispatch =>
+//   subscribeToMessages1(userId, messages =>
+//     dispatch({ type: FETCH_USER_MESSAGES_SUCCESS, messages }),
+//   );

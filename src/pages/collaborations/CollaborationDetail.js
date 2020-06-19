@@ -1,11 +1,27 @@
 import React from 'react';
 import withAuthorization from '../../components/hoc/withAuthorization';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { subToCollaboration } from '../../actions';
+import { useDispatch, useSelector } from 'react-redux';
 
-const CollaborationDetail = () => {
+const CollaborationDetail = ({ auth }) => {
+  const collaboration = useSelector(state => state.collaboration.joined);
+  const joinedPeople = useSelector(state => state.collaboration.joinedPeople);
+
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribeFromCollab = dispatch(subToCollaboration(id));
+
+    return () => unsubscribeFromCollab();
+  }, [dispatch, id]);
+
   return (
     <div className="content-wrapper">
       <div className="root">
-        {/* Body */}
+        <h1 className="title">{collaboration.title}</h1>
         <div className="body">
           <div className="viewListUser">
             <div className="viewWrapItem">
