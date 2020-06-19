@@ -9,7 +9,7 @@ const Navbar = ({ auth: { user, isAuth }, id, loadFresh }) => {
   const dispatch = useDispatch();
   // debugger;
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logout(user.uid));
   };
 
   useEffect(() => {

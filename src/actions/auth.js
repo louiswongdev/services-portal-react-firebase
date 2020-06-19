@@ -6,6 +6,7 @@ import {
   SET_AUTH_USER_LOGOUT,
 } from '../types';
 import db from '../db';
+import { createFirebaseRef, isOfflineForDatabase } from '../db/connection';
 
 /**
  * ------------------------------------------
@@ -72,19 +73,11 @@ export const getUserProfile = async uid => {
  * Login User
  * ------------------------------------------
  */
-// export const login = async ({ email, password }) => {
-//   try {
-//     await firebase.auth().signInWithEmailAndPassword(email, password);
-//   } catch (error) {
-//     throw new Error(error.message);
-//   }
-// };
 
 export const login = ({ email, password }) => {
   return async dispatch => {
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
-      // dispatch({ type: RESET_AUTH_STATE });
     } catch (error) {
       throw new Error(error.message);
     }
@@ -93,21 +86,17 @@ export const login = ({ email, password }) => {
 
 export const resetAuthState = () => ({ type: RESET_AUTH_STATE });
 
-// export const resetAuthState = () => {
-//   return async dispatch => {
-//     await dispatch({ type: RESET_AUTH_STATE });
-//   };
-// };
-
 /**
  * ------------------------------------------
  * Logout User
  * ------------------------------------------
  */
-export const logout = () => {
+export const logout = uid => {
   return async dispatch => {
     await firebase.auth().signOut();
-    // dispatch({ type: RESET_AUTH_STATE });
+
+    const userStatusDatabaseRef = createFirebaseRef('status', uid);
+    await userStatusDatabaseRef.set(isOfflineForDatabase);
     dispatch({ type: SET_AUTH_USER_LOGOUT, user: null });
   };
 };
@@ -134,7 +123,6 @@ export const storeAuthUser = authUser => {
     if (authUser) {
       try {
         const userWithProfile = await getUserProfile(authUser.uid);
-        // dispatch({ type: RESET_AUTH_STATE });
         dispatch({ type: SET_AUTH_USER, user: userWithProfile });
       } catch (error) {
         console.log(error.message);
