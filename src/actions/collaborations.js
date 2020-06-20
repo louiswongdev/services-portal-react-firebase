@@ -101,7 +101,7 @@ export const fetchCollaborations = async userId => {
  * Subscribe to Collaborations
  * ------------------------------------------
  */
-export const subToCollaboration = collabId => dispatch => {
+export const subToCollaboration = (collabId, doneCB) => dispatch => {
   const collabRef = db.collection('collaborations').doc(collabId);
 
   return collabRef.onSnapshot(async snapshot => {
@@ -119,6 +119,7 @@ export const subToCollaboration = collabId => dispatch => {
 
     dispatch({ type: SET_COLLABORATION, collaboration });
     dispatch({ type: SET_COLLABORATION_JOINED_PEOPLE, joinedPeople });
+    doneCB({ joinedPeople });
   });
 };
 
@@ -136,6 +137,21 @@ export const joinCollaboration = (collabId, uid) => {
     .update({
       joinedPeople: firebase.firestore.FieldValue.arrayUnion(userRef),
     });
+};
+
+/**
+ * ------------------------------------------
+ * Subscribe to Profile (give up-to-date user status state on
+ * collaboration detail page)
+ * ------------------------------------------
+ */
+export const subToProfile = (uid, done) => {
+  const profileRef = db.collection('profiles').doc(uid);
+
+  return profileRef.onSnapshot(snapshot => {
+    const user = { id: snapshot.id, ...snapshot.data() };
+    console.log(user);
+  });
 };
 
 /**

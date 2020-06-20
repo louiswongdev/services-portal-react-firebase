@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import withAuthorization from '../../components/hoc/withAuthorization';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { subToCollaboration, joinCollaboration } from '../../actions';
+import {
+  subToCollaboration,
+  joinCollaboration,
+  subToProfile,
+} from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import JoinedPeople from '../../components/collaboration/JoinedPeople';
 
@@ -13,13 +17,44 @@ const CollaborationDetail = ({ auth: { user } }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
+  const peopleWatchers = {};
+
+  // const watchJoinedPeopleChanges = useCallback(
+  //   ids => {
+  //     ids.forEach(id => {
+  //       peopleWatchers[id] = subToProfile(id);
+  //     });
+  //   },
+  //   [peopleWatchers],
+  // );
+
   useEffect(() => {
     joinCollaboration(id, user.uid);
-    const unsubscribeFromCollab = dispatch(subToCollaboration(id));
+    const unsubscribeFromCollab = dispatch(
+      subToCollaboration(id, ({ joinedPeople }) => {
+        watchJoinedPeopleChanges(joinedPeople.map(jp => jp.id));
+      }),
+    );
 
-    return () => unsubscribeFromCollab();
+    const watchJoinedPeopleChanges = ids => {
+      ids.forEach(id => {
+        peopleWatchers[id] = subToProfile(id);
+      });
+    };
+
+    return () => {
+      unsubscribeFromCollab();
+      // to unsub from each person in peopleWatchers object,
+      // we need to turn into array and loop through item to call
+      // subToProfile function
+      if (Object.entries(peopleWatchers).length !== 0) {
+        Object.keys(peopleWatchers).forEach(uid => {
+          return peopleWatchers[uid]();
+        });
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [dispatch, id, user.uid]);
 
   return (
     <div className="content-wrapper">
