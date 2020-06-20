@@ -2,10 +2,11 @@ import React from 'react';
 import withAuthorization from '../../components/hoc/withAuthorization';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { subToCollaboration } from '../../actions';
+import { subToCollaboration, joinCollaboration } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
+import JoinedPeople from '../../components/collaboration/JoinedPeople';
 
-const CollaborationDetail = ({ auth }) => {
+const CollaborationDetail = ({ auth: { user } }) => {
   const collaboration = useSelector(state => state.collaboration.joined);
   const joinedPeople = useSelector(state => state.collaboration.joinedPeople);
 
@@ -13,10 +14,12 @@ const CollaborationDetail = ({ auth }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    joinCollaboration(id, user.uid);
     const unsubscribeFromCollab = dispatch(subToCollaboration(id));
 
     return () => unsubscribeFromCollab();
-  }, [dispatch, id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   return (
     <div className="content-wrapper">
@@ -24,17 +27,7 @@ const CollaborationDetail = ({ auth }) => {
         <h1 className="title">{collaboration.title}</h1>
         <div className="body">
           <div className="viewListUser">
-            <div className="viewWrapItem">
-              <img
-                className="viewAvatarItem"
-                src="https://i.imgur.com/cVDadwb.png"
-                alt="icon avatar"
-              />
-              <div className="viewWrapContentItem">
-                <span className="textItem">Nickname: Filip Jerga</span>
-                <span className="textItem">online</span>
-              </div>
-            </div>
+            {<JoinedPeople users={joinedPeople} />}
           </div>
           <div className="viewBoard">
             <div className="viewChatBoard">

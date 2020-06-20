@@ -1,10 +1,12 @@
 import db from '../db';
+import firebase from 'firebase/app';
 import {
   COLLABORATION_CREATED_FROM_OFFER,
   FETCH_USER_MESSAGES_SUCCESS,
   SET_COLLABORATION,
   SET_COLLABORATION_JOINED_PEOPLE,
 } from '../types';
+import { createRef } from './index';
 
 /**
  * ------------------------------------------
@@ -118,6 +120,22 @@ export const subToCollaboration = collabId => dispatch => {
     dispatch({ type: SET_COLLABORATION, collaboration });
     dispatch({ type: SET_COLLABORATION_JOINED_PEOPLE, joinedPeople });
   });
+};
+
+/**
+ * ------------------------------------------
+ * Join Collaboration
+ * ------------------------------------------
+ */
+export const joinCollaboration = (collabId, uid) => {
+  const userRef = createRef('profiles', uid);
+
+  return db
+    .collection('collaborations')
+    .doc(collabId)
+    .update({
+      joinedPeople: firebase.firestore.FieldValue.arrayUnion(userRef),
+    });
 };
 
 /**
