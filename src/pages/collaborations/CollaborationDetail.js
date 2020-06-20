@@ -6,6 +6,7 @@ import {
   subToCollaboration,
   joinCollaboration,
   subToProfile,
+  leaveCollaboration,
 } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import JoinedPeople from '../../components/collaboration/JoinedPeople';
@@ -52,6 +53,10 @@ const CollaborationDetail = ({ auth: { user } }) => {
           return peopleWatchers[uid]();
         });
       }
+
+      // unsub from collaboration when user leaves collaboration page
+      // check if we have user first --> possible issue when logging out
+      user && leaveCollaboration(id, user.uid);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id, user.uid]);

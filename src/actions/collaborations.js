@@ -142,6 +142,22 @@ export const joinCollaboration = (collabId, uid) => {
 
 /**
  * ------------------------------------------
+ * Leave Collaboration
+ * ------------------------------------------
+ */
+export const leaveCollaboration = (collabId, uid) => {
+  const userRef = createRef('profiles', uid);
+
+  return db
+    .collection('collaborations')
+    .doc(collabId)
+    .update({
+      joinedPeople: firebase.firestore.FieldValue.arrayRemove(userRef),
+    });
+};
+
+/**
+ * ------------------------------------------
  * Subscribe to Profile (give up-to-date user status state on
  * collaboration detail page)
  * ------------------------------------------
