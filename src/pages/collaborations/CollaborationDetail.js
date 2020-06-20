@@ -38,7 +38,7 @@ const CollaborationDetail = ({ auth: { user } }) => {
 
     const watchJoinedPeopleChanges = ids => {
       ids.forEach(id => {
-        peopleWatchers[id] = subToProfile(id);
+        peopleWatchers[id] = dispatch(subToProfile(id));
       });
     };
 

@@ -5,6 +5,7 @@ import {
   FETCH_USER_MESSAGES_SUCCESS,
   SET_COLLABORATION,
   SET_COLLABORATION_JOINED_PEOPLE,
+  UPDATE_COLLABORATION_USER,
 } from '../types';
 import { createRef } from './index';
 
@@ -145,12 +146,12 @@ export const joinCollaboration = (collabId, uid) => {
  * collaboration detail page)
  * ------------------------------------------
  */
-export const subToProfile = (uid, done) => {
+export const subToProfile = uid => dispatch => {
   const profileRef = db.collection('profiles').doc(uid);
 
   return profileRef.onSnapshot(snapshot => {
     const user = { id: snapshot.id, ...snapshot.data() };
-    console.log(user);
+    dispatch({ type: UPDATE_COLLABORATION_USER, user });
   });
 };
 
