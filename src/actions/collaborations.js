@@ -167,6 +167,7 @@ export const subToProfile = uid => dispatch => {
 
   return profileRef.onSnapshot(snapshot => {
     const user = { id: snapshot.id, ...snapshot.data() };
+    // debugger;
     dispatch({ type: UPDATE_COLLABORATION_USER, user });
   });
 };

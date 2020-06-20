@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import withAuthorization from '../../components/hoc/withAuthorization';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -11,7 +11,10 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import JoinedPeople from '../../components/collaboration/JoinedPeople';
 
+import moment from 'moment';
+
 const CollaborationDetail = ({ auth: { user } }) => {
+  const [inputValue, setInputValue] = useState('');
   const collaboration = useSelector(state => state.collaboration.joined);
   const joinedPeople = useSelector(state => state.collaboration.joinedPeople);
 
@@ -19,6 +22,36 @@ const CollaborationDetail = ({ auth: { user } }) => {
   const dispatch = useDispatch();
 
   const peopleWatchers = {};
+
+  const handleChange = e => {
+    setInputValue(e.target.value);
+  };
+
+  const onKeyboardPress = e => {
+    if (e.key === 'Enter') {
+      onSendMessage(inputValue);
+    }
+  };
+
+  const onSendMessage = inputValue => {
+    if (inputValue.trim() === '') {
+      return;
+    }
+
+    const timestamp = moment().valueOf().toString();
+    const message = {
+      user: {
+        uid: user.uid,
+        avatar: user.avatar,
+        name: user.fullName,
+      },
+      timestamp: parseInt(timestamp, 10),
+      content: inputValue.trim(),
+    };
+
+    console.log('sending message:', message);
+    setInputValue('');
+  };
 
   // const watchJoinedPeopleChanges = useCallback(
   //   ids => {
@@ -100,10 +133,18 @@ const CollaborationDetail = ({ auth: { user } }) => {
               </div>
               <div className="viewBottom">
                 <input
-                  onChange={() => {}}
+                  onChange={handleChange}
+                  onKeyPress={onKeyboardPress}
+                  value={inputValue}
                   className="viewInput"
                   placeholder="Type your message..."
                 />
+                <button
+                  onClick={() => onSendMessage(inputValue)}
+                  className="button is-primary is-large"
+                >
+                  Send
+                </button>
               </div>
             </div>
           </div>
