@@ -14,11 +14,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import JoinedPeople from '../../components/collaboration/JoinedPeople';
 
 import moment from 'moment';
+import ChatMessages from '../../components/collaboration/ChatMessages';
 
 const CollaborationDetail = ({ auth: { user } }) => {
   const [inputValue, setInputValue] = useState('');
   const collaboration = useSelector(state => state.collaboration.joined);
   const joinedPeople = useSelector(state => state.collaboration.joinedPeople);
+  const messages = useSelector(state => state.collaboration.messages);
 
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -121,25 +123,10 @@ const CollaborationDetail = ({ auth: { user } }) => {
                   src="https://i.imgur.com/cVDadwb.png"
                   alt="icon avatar"
                 />
-                <span className="textHeaderChatBoard">Filip Jerga</span>
+                <span className="textHeaderChatBoard">{user.fullName}</span>
               </div>
               <div className="viewListContentChat">
-                <div className="viewWrapItemLeft">
-                  <div className="viewWrapItemLeft3">
-                    <img
-                      src="https://i.imgur.com/cVDadwb.png"
-                      alt="avatar"
-                      className="peerAvatarLeft"
-                    />
-                    <div className="viewItemLeft">
-                      <span className="textContentItem">hey</span>
-                    </div>
-                  </div>
-                  <span className="textTimeLeft">Oct 31, 2019</span>
-                </div>
-                <div className="viewItemRight">
-                  <span className="textContentItem">hey</span>
-                </div>
+                {<ChatMessages messages={messages} authUser={user} />}
                 <div style={{ float: 'left', clear: 'both' }}></div>
               </div>
               <div className="viewBottom">
