@@ -4,6 +4,7 @@ import {
   SET_COLLABORATION_JOINED_PEOPLE,
   UPDATE_COLLABORATION_USER,
   SET_COLLABORATION_MESSAGE,
+  RESET_COLLABORATION_MESSAGES,
 } from '../types';
 
 const initCollab = () => {
@@ -56,6 +57,8 @@ const initCollab = () => {
           }
         });
         return newMessages;
+      case RESET_COLLABORATION_MESSAGES:
+        return [];
       default:
         return state;
     }

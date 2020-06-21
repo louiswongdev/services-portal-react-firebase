@@ -7,6 +7,7 @@ import {
   SET_COLLABORATION_JOINED_PEOPLE,
   UPDATE_COLLABORATION_USER,
   SET_COLLABORATION_MESSAGE,
+  RESET_COLLABORATION_MESSAGES,
 } from '../types';
 import { createRef } from './index';
 
@@ -198,6 +199,8 @@ export const subToMessages = collabId => dispatch => {
     .doc(collabId)
     .collection('messages');
 
+  dispatch({ type: RESET_COLLABORATION_MESSAGES });
+
   return messageRef.onSnapshot(snapshot => {
     const messages = snapshot.docChanges();
 
@@ -222,4 +225,13 @@ export const subscribeToMessages = userId => dispatch => {
       }));
       dispatch({ type: FETCH_USER_MESSAGES_SUCCESS, messages });
     });
+};
+
+/**
+ * ------------------------------------------
+ * Start collaboration timer
+ * ------------------------------------------
+ */
+export const startCollaboration = (collabId, expiresAt) => {
+  return db.collection('collaborations').doc(collabId).update({ expiresAt });
 };

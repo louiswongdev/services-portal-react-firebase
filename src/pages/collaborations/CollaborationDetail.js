@@ -9,12 +9,15 @@ import {
   leaveCollaboration,
   sendChatMessage,
   subToMessages,
+  startCollaboration,
 } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import JoinedPeople from '../../components/collaboration/JoinedPeople';
 
 import moment from 'moment';
 import ChatMessages from '../../components/collaboration/ChatMessages';
+import { Timestamp } from '../../db';
+import Timer from '../../components/collaboration/Timer';
 
 const CollaborationDetail = ({ auth: { user } }) => {
   const [inputValue, setInputValue] = useState('');
@@ -60,14 +63,16 @@ const CollaborationDetail = ({ auth: { user } }) => {
     }).then(_ => setInputValue(''));
   };
 
-  // const watchJoinedPeopleChanges = useCallback(
-  //   ids => {
-  //     ids.forEach(id => {
-  //       peopleWatchers[id] = subToProfile(id);
-  //     });
-  //   },
-  //   [peopleWatchers],
-  // );
+  const onStartCollaboration = collaboration => {
+    const { id, time } = collaboration;
+    const currentTimeInSeconds = Timestamp.now().seconds;
+
+    // 0 --> nanoseconds. We don't need to show it
+    const expiresAt = new Timestamp(currentTimeInSeconds + time, 0);
+
+    // call action to store expiresAt value to collaboration field
+    startCollaboration(id, expiresAt);
+  };
 
   useEffect(() => {
     joinCollaboration(id, user.uid);
@@ -118,12 +123,25 @@ const CollaborationDetail = ({ auth: { user } }) => {
           <div className="viewBoard">
             <div className="viewChatBoard">
               <div className="headerChatBoard">
-                <img
-                  className="viewAvatarItem"
-                  src="https://i.imgur.com/cVDadwb.png"
-                  alt="icon avatar"
-                />
-                <span className="textHeaderChatBoard">{user.fullName}</span>
+                <div className="headerChatUser">
+                  <img
+                    className="viewAvatarItem"
+                    src="https://i.imgur.com/cVDadwb.png"
+                    alt="icon avatar"
+                  />
+                  <span className="textHeaderChatBoard">{user.fullName}</span>
+                </div>
+                {false && (
+                  <div className="headerChatButton">
+                    <button
+                      onClick={() => onStartCollaboration(collaboration)}
+                      className="button is-success"
+                    >
+                      Start Collaboration
+                    </button>
+                  </div>
+                )}
+                {<Timer />}
               </div>
               <div className="viewListContentChat">
                 {<ChatMessages messages={messages} authUser={user} />}
