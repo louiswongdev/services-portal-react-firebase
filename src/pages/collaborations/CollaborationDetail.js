@@ -7,6 +7,8 @@ import {
   joinCollaboration,
   subToProfile,
   leaveCollaboration,
+  sendChatMessage,
+  subToMessages,
 } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import JoinedPeople from '../../components/collaboration/JoinedPeople';
@@ -49,8 +51,11 @@ const CollaborationDetail = ({ auth: { user } }) => {
       content: inputValue.trim(),
     };
 
-    console.log('sending message:', message);
-    setInputValue('');
+    sendChatMessage({
+      message,
+      collabId: collaboration.id,
+      timestamp,
+    }).then(_ => setInputValue(''));
   };
 
   // const watchJoinedPeopleChanges = useCallback(
@@ -64,11 +69,16 @@ const CollaborationDetail = ({ auth: { user } }) => {
 
   useEffect(() => {
     joinCollaboration(id, user.uid);
+
+    // subscribe to users joining collaoboration page
     const unsubscribeFromCollab = dispatch(
       subToCollaboration(id, ({ joinedPeople }) => {
         watchJoinedPeopleChanges(joinedPeople.map(jp => jp.id));
       }),
     );
+
+    // subscribe to chat messages
+    const unsubscribeFromMessages = dispatch(subToMessages(id));
 
     const watchJoinedPeopleChanges = ids => {
       ids.forEach(id => {
@@ -78,6 +88,7 @@ const CollaborationDetail = ({ auth: { user } }) => {
 
     return () => {
       unsubscribeFromCollab();
+      unsubscribeFromMessages();
       // to unsub from each person in peopleWatchers object,
       // we need to turn into array and loop through item to call
       // subToProfile function

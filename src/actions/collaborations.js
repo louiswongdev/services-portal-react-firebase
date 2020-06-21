@@ -6,6 +6,7 @@ import {
   SET_COLLABORATION,
   SET_COLLABORATION_JOINED_PEOPLE,
   UPDATE_COLLABORATION_USER,
+  SET_COLLABORATION_MESSAGE,
 } from '../types';
 import { createRef } from './index';
 
@@ -174,7 +175,39 @@ export const subToProfile = uid => dispatch => {
 
 /**
  * ------------------------------------------
- * Subscribe to messages
+ * Send messages
+ * ------------------------------------------
+ */
+export const sendChatMessage = ({ message, collabId, timestamp }) => {
+  return db
+    .collection('collaborations')
+    .doc(collabId)
+    .collection('messages')
+    .doc(timestamp)
+    .set(message);
+};
+
+/**
+ * ------------------------------------------
+ * Subscribe to chat messages
+ * ------------------------------------------
+ */
+export const subToMessages = collabId => dispatch => {
+  const messageRef = db
+    .collection('collaborations')
+    .doc(collabId)
+    .collection('messages');
+
+  return messageRef.onSnapshot(snapshot => {
+    const messages = snapshot.docChanges();
+
+    dispatch({ type: SET_COLLABORATION_MESSAGE, messages });
+  });
+};
+
+/**
+ * ------------------------------------------
+ * Subscribe to messages (when use accepts collaboration)
  * ------------------------------------------
  */
 export const subscribeToMessages = userId => dispatch => {
@@ -190,21 +223,3 @@ export const subscribeToMessages = userId => dispatch => {
       dispatch({ type: FETCH_USER_MESSAGES_SUCCESS, messages });
     });
 };
-
-// const subscribeToMessages1 = (userId, callback) =>
-//   db
-//     .collection('profiles')
-//     .doc(userId)
-//     .collection('messages')
-//     .onSnapshot(snapshot => {
-//       const messages = snapshot.docs.map(doc => ({
-//         id: doc.id,
-//         ...doc.data(),
-//       }));
-//       callback(messages);
-//     });
-
-// export const subscribeToMessages = userId => dispatch =>
-//   subscribeToMessages1(userId, messages =>
-//     dispatch({ type: FETCH_USER_MESSAGES_SUCCESS, messages }),
-//   );
