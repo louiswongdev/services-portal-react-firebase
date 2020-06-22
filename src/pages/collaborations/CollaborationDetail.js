@@ -18,9 +18,11 @@ import moment from 'moment';
 import ChatMessages from '../../components/collaboration/ChatMessages';
 import { Timestamp } from '../../db';
 import Timer from '../../components/collaboration/Timer';
+import Spinner from '../../components/Spinner';
 
 const CollaborationDetail = ({ auth: { user } }) => {
   const [inputValue, setInputValue] = useState('');
+  const [reload, setReload] = useState(false);
   const collaboration = useSelector(state => state.collaboration.joined);
   const joinedPeople = useSelector(state => state.collaboration.joinedPeople);
   const messages = useSelector(state => state.collaboration.messages);
@@ -74,10 +76,6 @@ const CollaborationDetail = ({ auth: { user } }) => {
     startCollaboration(id, expiresAt);
   };
 
-  const reloadPage = () => {
-    alert('Timed out!');
-  };
-
   useEffect(() => {
     joinCollaboration(id, user.uid);
 
@@ -116,6 +114,35 @@ const CollaborationDetail = ({ auth: { user } }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id, user.uid]);
 
+  const reloadPage = () => {
+    // set reload state to trigger component re-render
+    // which in turn checks status via getCollaborationStatus fn
+    setReload(true);
+  };
+
+  // if checks to see if our collaboration has started, is active
+  // or is finished
+  const getCollaborationStatus = collaboration => {
+    if (Object.keys(collaboration).length === 0) {
+      return 'loading';
+    }
+
+    if (!collaboration.expiresAt) {
+      return 'notStarted';
+    }
+
+    if (Timestamp.now().seconds < collaboration.expiresAt.seconds) {
+      return 'active';
+    } else {
+      return 'finished';
+    }
+  };
+
+  const status = getCollaborationStatus(collaboration);
+  if (status === 'loading') {
+    return <Spinner />;
+  }
+
   return (
     <div className="content-wrapper">
       <div className="root">
@@ -135,7 +162,7 @@ const CollaborationDetail = ({ auth: { user } }) => {
                   />
                   <span className="textHeaderChatBoard">{user.fullName}</span>
                 </div>
-                {true && (
+                {status === 'notStarted' && (
                   <div className="headerChatButton">
                     <button
                       onClick={() => onStartCollaboration(collaboration)}
@@ -145,13 +172,18 @@ const CollaborationDetail = ({ auth: { user } }) => {
                     </button>
                   </div>
                 )}
-                {collaboration.expiresAt && (
+                {status === 'active' && (
                   <Timer
                     timeoutCB={reloadPage}
                     seconds={
                       collaboration.expiresAt.seconds - Timestamp.now().seconds
                     }
                   />
+                )}
+                {status === 'finished' && (
+                  <span className="tag is-warning is-large">
+                    Collaboration Complete
+                  </span>
                 )}
               </div>
               <div className="viewListContentChat">
@@ -165,10 +197,12 @@ const CollaborationDetail = ({ auth: { user } }) => {
                   value={inputValue}
                   className="viewInput"
                   placeholder="Type your message..."
+                  disabled={status === 'finished' || status === 'notStarted'}
                 />
                 <button
                   onClick={() => onSendMessage(inputValue)}
                   className="button is-primary is-large"
+                  disabled={status === 'finished' || status === 'notStarted'}
                 >
                   Send
                 </button>
