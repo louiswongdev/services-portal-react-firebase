@@ -74,6 +74,10 @@ const CollaborationDetail = ({ auth: { user } }) => {
     startCollaboration(id, expiresAt);
   };
 
+  const reloadPage = () => {
+    alert('Timed out!');
+  };
+
   useEffect(() => {
     joinCollaboration(id, user.uid);
 
@@ -131,7 +135,7 @@ const CollaborationDetail = ({ auth: { user } }) => {
                   />
                   <span className="textHeaderChatBoard">{user.fullName}</span>
                 </div>
-                {false && (
+                {true && (
                   <div className="headerChatButton">
                     <button
                       onClick={() => onStartCollaboration(collaboration)}
@@ -141,7 +145,14 @@ const CollaborationDetail = ({ auth: { user } }) => {
                     </button>
                   </div>
                 )}
-                {<Timer />}
+                {collaboration.expiresAt && (
+                  <Timer
+                    timeoutCB={reloadPage}
+                    seconds={
+                      collaboration.expiresAt.seconds - Timestamp.now().seconds
+                    }
+                  />
+                )}
               </div>
               <div className="viewListContentChat">
                 {<ChatMessages messages={messages} authUser={user} />}
