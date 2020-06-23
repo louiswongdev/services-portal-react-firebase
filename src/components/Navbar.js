@@ -110,14 +110,8 @@ const Navbar = ({ auth: { user, isAuth }, id, loadFresh }) => {
             <Link to="/" className="navbar-item is-secondary">
               Home
             </Link>
-            <Link to="/services" className="navbar-item is-secondary">
-              Services
-            </Link>
             <Link to="/faq" className="navbar-item is-secondary">
               FAQ
-            </Link>
-            <Link to="/profile" className="navbar-item is-secondary">
-              Profile
             </Link>
             {isAuth && (
               <>

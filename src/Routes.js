@@ -35,7 +35,6 @@ const Routes = () => {
       <Route path="/services/:serviceId" exact component={ServiceDetail} />
       <Route path="/services" exact component={Services} />
       <Route path="/faq" exact component={Faq} />
-      <Route path="/profile" exact component={Profile} />
       <Route path="/" component={HomePage} />
     </Switch>
   );
