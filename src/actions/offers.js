@@ -1,6 +1,11 @@
 import db from '../db';
 import { createRef } from '.';
-import { FETCH_OFFERS_SUCCESS, CHANGE_OFFER_STATUS } from '../types';
+import {
+  FETCH_OFFERS_SUCCESS,
+  CHANGE_OFFER_STATUS,
+  FETCH_RESOURCE_SUCCESS,
+  REQUEST_RESOURCE,
+} from '../types';
 
 /**
  * ------------------------------------------
@@ -34,6 +39,8 @@ const extractDataFromOffer = async (offer, userType) => {
  * ------------------------------------------
  */
 export const fetchSentOffers = userId => async dispatch => {
+  dispatch({ type: REQUEST_RESOURCE, resourceType: 'offers' });
+
   const userRef = createRef('profiles', userId);
 
   try {
@@ -58,6 +65,7 @@ export const fetchSentOffers = userId => async dispatch => {
       offers: mappedOffers,
       offersType: 'sent',
     });
+    dispatch({ type: FETCH_RESOURCE_SUCCESS, resourceType: 'offers' });
   } catch (error) {
     console.log(error);
   }
@@ -69,6 +77,8 @@ export const fetchSentOffers = userId => async dispatch => {
  * ------------------------------------------
  */
 export const fetchReceivedOffers = userId => async dispatch => {
+  dispatch({ type: REQUEST_RESOURCE, resourceType: 'offers' });
+
   const userRef = createRef('profiles', userId);
 
   try {
@@ -91,6 +101,7 @@ export const fetchReceivedOffers = userId => async dispatch => {
       offers: mappedOffers,
       offersType: 'received',
     });
+    dispatch({ type: FETCH_RESOURCE_SUCCESS, resourceType: 'offers' });
   } catch (error) {
     console.log(error);
   }

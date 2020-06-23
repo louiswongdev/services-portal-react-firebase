@@ -1,15 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import withAuthorization from '../../components/hoc/withAuthorization';
 import { useDispatch, useSelector } from 'react-redux';
 import ServiceItem from '../../components/service/ServiceItem';
 import { fetchReceivedOffers, changeOfferStatus } from '../../actions';
+import Spinner from '../../components/Spinner';
 
 const ReceivedOffers = ({ auth }) => {
+  const [initialLoad, setInitialLoad] = useState(true);
   const offers = useSelector(state => state.offers.received);
+  const isFetching = useSelector(state => state.offers.isFetching);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // debugger;
     dispatch(fetchReceivedOffers(auth.user.uid));
+    setInitialLoad(false)
   }, [auth.user.uid, dispatch]);
 
   const handleAcceptOffer = offerId => {
@@ -27,9 +32,16 @@ const ReceivedOffers = ({ auth }) => {
   };
 
   return (
+    isFetching || initialLoad ?  <Spinner /> : (
     <div className="container">
       <div className="content-wrapper">
         <h1 className="title">Received Offers</h1>
+
+        {!isFetching && offers.length === 0 && (
+          <span className="tag is-warning is-large">
+            You do not have any received offers
+          </span>
+        )}
         <div className="columns">
           {offers.map(offer => (
             <div key={offer.id} className="column is-one-third">
@@ -80,6 +92,8 @@ const ReceivedOffers = ({ auth }) => {
         </div>
       </div>
     </div>
+
+    )
   );
 };
 

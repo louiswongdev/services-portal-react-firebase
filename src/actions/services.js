@@ -36,10 +36,11 @@ export const fetchServices = () => {
  */
 export const fetchUserServices = userId => {
   return async dispatch => {
+    const userRef = createRef('profiles', userId);
     try {
       const snapshot = await db
         .collection('services')
-        .where('user', '==', userId)
+        .where('user', '==', userRef)
         .get();
       const userServices = snapshot.docs.map(doc => ({
         id: doc.id,

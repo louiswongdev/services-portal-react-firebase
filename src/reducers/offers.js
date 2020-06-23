@@ -5,6 +5,8 @@ import {
   COLLABORATION_CREATED_FROM_OFFER,
 } from '../types';
 
+import { isFetching } from './common';
+
 const createOfferList = offersType => {
   return (state = [], action) => {
     // check to see if offersType passed in is either 'sent' or 'received'
@@ -43,6 +45,7 @@ const createOfferList = offersType => {
 const offers = combineReducers({
   received: createOfferList('received'),
   sent: createOfferList('sent'),
+  isFetching: isFetching('offers'),
 });
 
 export default offers;

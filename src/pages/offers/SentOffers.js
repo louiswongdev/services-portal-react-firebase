@@ -1,19 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import withAuthorization from '../../components/hoc/withAuthorization';
 import ServiceItem from '../../components/service/ServiceItem';
 import { fetchSentOffers, createCollaboration } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { newCollaboration, newMessage } from '../../helpers/offers';
 import { useToasts } from 'react-toast-notifications';
+import Spinner from '../../components/Spinner';
 
 const SentOffers = ({ auth }) => {
+  const [initialLoad, setInitialLoad] = useState(true);
   const offers = useSelector(state => state.offers.sent);
+  const isFetching = useSelector(state => state.offers.isFetching);
   const dispatch = useDispatch();
 
   const { addToast } = useToasts();
 
   useEffect(() => {
+    // debugger;
     dispatch(fetchSentOffers(auth.user.uid));
+    setInitialLoad(false)
   }, [auth.user.uid, dispatch]);
 
   const handleCreateCollaboration = async offer => {
@@ -39,9 +44,16 @@ const SentOffers = ({ auth }) => {
   };
 
   return (
+    isFetching || initialLoad ? <Spinner /> : (
+
     <div className="container">
       <div className="content-wrapper">
         <h1 className="title">Sent Offers</h1>
+        {!isFetching && offers.length === 0 && (
+          <span className="tag is-warning is-large">
+            You do not have any sent offers
+          </span>
+        )}
         <div className="columns">
           {offers.map(offer => (
             <div key={offer.id} className="column is-one-third">
@@ -84,6 +96,7 @@ const SentOffers = ({ auth }) => {
         </div>
       </div>
     </div>
+    )
   );
 };
 
