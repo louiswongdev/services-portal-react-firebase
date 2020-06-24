@@ -32,6 +32,7 @@ const ServiceDetail = () => {
               </figure>
             </div>
             <div className="column is-6 is-offset-1">
+              <h1 className="title is-2 service-title">{service.title}</h1>
               <div className="service-header-container">
                 <div className="media service-user">
                   <div className="media-left">
@@ -50,7 +51,6 @@ const ServiceDetail = () => {
                 </div>
                 <div className="service-price">${service.price} per Hour</div>
               </div>
-              <h1 className="title is-2 service-title">{service.title}</h1>
               <div className="tag is-large service-category">
                 {service.category}
               </div>

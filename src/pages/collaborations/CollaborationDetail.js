@@ -197,12 +197,12 @@ const CollaborationDetail = ({ auth: { user } }) => {
                   value={inputValue}
                   className="viewInput"
                   placeholder="Type your message..."
-                  disabled={status === 'finished' || status === 'notStarted'}
+                  // disabled={status === 'finished' || status === 'notStarted'}
                 />
                 <button
                   onClick={() => onSendMessage(inputValue)}
                   className="button is-primary is-large"
-                  disabled={status === 'finished' || status === 'notStarted'}
+                  // disabled={status === 'finished' || status === 'notStarted'}
                 >
                   Send
                 </button>

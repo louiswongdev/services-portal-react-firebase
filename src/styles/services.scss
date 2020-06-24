@@ -1,4 +1,9 @@
 .service-detail-page {
+
+  .columns.is-vcentered {
+    align-items: flex-start;
+}
+
   .media-content {
     flex-grow: 0;
   }
@@ -22,6 +27,7 @@
 
   .service-header-container {
     display: flex;
+    margin-top: 16px;
 }
 
   .service-user {

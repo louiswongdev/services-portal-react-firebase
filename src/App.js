@@ -23,6 +23,14 @@ function App() {
         checkUserConnection(authUser.uid);
         unsubscribeMessages = store.dispatch(subscribeToMessages(authUser.uid));
       }
+
+      // FIX for firebase error when logging out --> Uncaught Error in
+      // onSnapshot: FirebaseError: Missing or insufficient permissions.
+      //Basically if there is no authUser (we're logged out), check for
+      // unsubscribeMessages first, then run the function
+      if (!authUser) {
+        unsubscribeMessages && unsubscribeMessages();
+      }
     });
 
     return () => {
