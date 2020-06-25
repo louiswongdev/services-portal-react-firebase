@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import withAuthorization from '../../components/hoc/withAuthorization';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -58,11 +58,18 @@ const CollaborationDetail = ({ auth: { user } }) => {
       content: inputValue.trim(),
     };
 
-    sendChatMessage({
-      message,
-      collabId: collaboration.id,
-      timestamp,
-    }).then(_ => setInputValue(''));
+    dispatch(
+      sendChatMessage({
+        message,
+        collabId: collaboration.id,
+        timestamp,
+      }),
+    )
+      .then(_ => setInputValue(''))
+      .catch(error => {
+        setInputValue('');
+        alert(error);
+      });
   };
 
   const onStartCollaboration = collaboration => {

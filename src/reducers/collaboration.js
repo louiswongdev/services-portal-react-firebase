@@ -5,6 +5,7 @@ import {
   UPDATE_COLLABORATION_USER,
   SET_COLLABORATION_MESSAGE,
   RESET_COLLABORATION_MESSAGES,
+  REMOVE_COLLABORATION_MESSAGE,
 } from '../types';
 
 const initCollab = () => {
@@ -57,6 +58,8 @@ const initCollab = () => {
           }
         });
         return newMessages;
+      case REMOVE_COLLABORATION_MESSAGE:
+        return state.filter(m => m.id !== action.messageId);
       case RESET_COLLABORATION_MESSAGES:
         return [];
       default:

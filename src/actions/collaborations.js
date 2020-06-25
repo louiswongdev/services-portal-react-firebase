@@ -8,6 +8,7 @@ import {
   UPDATE_COLLABORATION_USER,
   SET_COLLABORATION_MESSAGE,
   RESET_COLLABORATION_MESSAGES,
+  REMOVE_COLLABORATION_MESSAGE,
 } from '../types';
 import { createRef } from './index';
 
@@ -179,13 +180,24 @@ export const subToProfile = uid => dispatch => {
  * Send messages
  * ------------------------------------------
  */
-export const sendChatMessage = ({ message, collabId, timestamp }) => {
+export const sendChatMessage = ({
+  message,
+  collabId,
+  timestamp,
+}) => dispatch => {
   return db
     .collection('collaborations')
     .doc(collabId)
     .collection('messages')
     .doc(timestamp)
-    .set(message);
+    .set(message)
+    .catch(error => {
+      dispatch({
+        type: REMOVE_COLLABORATION_MESSAGE,
+        messageId: message.timestamp.toString(),
+      });
+      return Promise.reject('Collaboration is expired');
+    });
 };
 
 /**
